@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\URL;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Sarfraznawaz2005\ServerMonitor\ServerMonitor;
 
 class MainController extends Controller
@@ -89,7 +90,7 @@ class MainController extends Controller
 
     public function createCode($prefix, $table)
     {
-        $user = Auth::user()->id;
+        $user = Auth::check() ? Auth::id() : 00;
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
         $index = DB::table($table)->max('id') + 1;
@@ -257,5 +258,10 @@ class MainController extends Controller
     public function serverMonitorRefresh(): array
     {
         return $this->serverMonitor->runCheck(request()->check);
+    }
+
+    public function generateQRCode($data)
+    {
+        QrCode::style('round')->generate($data);
     }
 }

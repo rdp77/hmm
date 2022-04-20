@@ -60,6 +60,7 @@ mix.scripts(
         "resources/js/jquery.chocolat.js",
         "resources/js/scripts.js",
         "resources/js/summernote-bs4.js",
+        // "node_modules/html5-qrcode/dist/html5-qrcode.min.js",
     ],
     "public/assets/scripts.js"
 ).version();

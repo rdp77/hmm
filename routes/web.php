@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FrontController;
 use App\Http\Controllers\Template\MainController;
 
 /*
@@ -16,9 +17,11 @@ use App\Http\Controllers\Template\MainController;
 */
 
 // Front End
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [FrontController::class, 'index']);
+Route::get('/search', [FrontController::class, 'search'])
+    ->name('search');
+Route::get('/{slug}', [FrontController::class, 'show']);
+
 // Backend
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');

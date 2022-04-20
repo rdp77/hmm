@@ -3,19 +3,24 @@
 @section('titleContent', __('auth.login'))
 
 @section('content')
-<div class="row">
-    <div class="col">
-        <a href="{{ route('login') }}" class="btn btn-icon icon-left btn-md btn-round btn-dark">
-            <i class="fas fa-sign-in-alt"></i>
-            {{ __('auth.login') }}
-        </a>
+<div id="reader"></div>
+<h3 class="mt-4 text-center">
+    {{ __('Atau') }}
+</h3>
+<div class="input-group">
+    <div class="input-group-prepend">
+        <div class="input-group-text">
+            <i class="fas fa-fingerprint"></i>
+        </div>
     </div>
-    <div class="col">
-        <a href="{{ route('register') }}" class="col btn btn-icon icon-left btn-md btn-round btn-dark">
-            <i class="fas fa-user-plus"></i>
-            {{ __('auth.register') }}
-        </a>
-    </div>
-
+    <input type="text" id="submit" name="maintance" class="form-control" placeholder="Kode Unik Maintance">
 </div>
+@endsection
+
+@section('script')
+<script type="text/javascript">
+    var url = "{{ route('search') }}";
+</script>
+<script src="https://unpkg.com/html5-qrcode@2.2.1/html5-qrcode.min.js" type="text/javascript"></script>
+<script src="{{ asset('assets/pages/front.js') }}" type="text/javascript"></script>
 @endsection
