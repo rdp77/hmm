@@ -42,10 +42,7 @@ class DashboardController extends Controller
         return view('dashboard', [
             'log' => $log,
             'users' => $users,
-            'logCount' => $logCount,
-            'ram' => $this->MainController->getTotalRAM(),
-            'cpu' => $this->MainController->getTotalCPU(),
-            'disk' => $this->MainController->getTotalDisk(),
+            'logCount' => $logCount
         ]);
     }
 

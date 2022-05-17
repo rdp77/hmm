@@ -31,6 +31,95 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item dropdown {{ Request::route()->getName() == 'users.index' ? 'active' : (
+                Request::route()->getName() == 'users.create' ? 'active' : (
+                        Request::route()->getName() == 'users.edit' ? 'active' : (
+                            Request::route()->getName() == 'users.show' ? 'active' : ''))) }}">
+                <a href="{{ route('users.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-microchip"></i>
+                    <span>{{ __('Hardware') }}</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Request::route()->getName() == 'users.index' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.index') }}">{{ __('Daftar') }}</a>
+                    </li>
+                    <li class="{{ Request::route()->getName() == 'users.create' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.create') }}">{{ __('Merk') }}</a>
+                    </li>
+                    <li class="{{ Request::route()->getName() == 'users.create' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.create') }}">{{ __('Sparepart') }}</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown {{ Request::route()->getName() == 'users.index' ? 'active' : (
+                Request::route()->getName() == 'users.create' ? 'active' : (
+                        Request::route()->getName() == 'users.edit' ? 'active' : (
+                            Request::route()->getName() == 'users.show' ? 'active' : ''))) }}">
+                <a href="{{ route('users.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-users"></i>
+                    <span>{{ __('MTBF') }}</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Request::route()->getName() == 'users.index' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.index') }}">{{ __('Daftar') }}</a>
+                    </li>
+                    <li class="{{ Request::route()->getName() == 'users.create' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.create') }}">{{ __('Tambah') }}</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown {{ Request::route()->getName() == 'users.index' ? 'active' : (
+                Request::route()->getName() == 'users.create' ? 'active' : (
+                        Request::route()->getName() == 'users.edit' ? 'active' : (
+                            Request::route()->getName() == 'users.show' ? 'active' : ''))) }}">
+                <a href="{{ route('users.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-users"></i>
+                    <span>{{ __('MTTR') }}</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Request::route()->getName() == 'users.index' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.index') }}">{{ __('Daftar') }}</a>
+                    </li>
+                    <li class="{{ Request::route()->getName() == 'users.create' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.create') }}">{{ __('Tambah') }}</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-header">{{ __('Laporan') }}</li>
+            <li class="nav-item dropdown {{ Request::route()->getName() == 'users.index' ? 'active' : (
+                Request::route()->getName() == 'users.create' ? 'active' : (
+                        Request::route()->getName() == 'users.edit' ? 'active' : (
+                            Request::route()->getName() == 'users.show' ? 'active' : ''))) }}">
+                <a href="{{ route('users.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-users"></i>
+                    <span>{{ __('MTBF') }}</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Request::route()->getName() == 'users.index' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.index') }}">{{ __('Daftar') }}</a>
+                    </li>
+                    <li class="{{ Request::route()->getName() == 'users.create' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.create') }}">{{ __('Tambah') }}</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown {{ Request::route()->getName() == 'users.index' ? 'active' : (
+                Request::route()->getName() == 'users.create' ? 'active' : (
+                        Request::route()->getName() == 'users.edit' ? 'active' : (
+                            Request::route()->getName() == 'users.show' ? 'active' : ''))) }}">
+                <a href="{{ route('users.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-users"></i>
+                    <span>{{ __('MTTR') }}</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Request::route()->getName() == 'users.index' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.index') }}">{{ __('Daftar') }}</a>
+                    </li>
+                    <li class="{{ Request::route()->getName() == 'users.create' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.create') }}">{{ __('Tambah') }}</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
+        <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
+            <a href="{{ route('formula') }}" class="btn btn-primary btn-lg btn-block btn-icon-split">
+                <i class="fas fa-calculator"></i> {{ __('Base Formula') }}
+            </a>
+        </div>
     </aside>
 </div>

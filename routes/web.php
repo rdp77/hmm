@@ -18,9 +18,11 @@ use App\Http\Controllers\Template\MainController;
 
 // Front End
 Route::get('/', [FrontController::class, 'index']);
+Route::get('/formula', [FrontController::class, 'formula'])
+    ->name('formula');
 Route::get('/search', [FrontController::class, 'search'])
     ->name('search');
-Route::get('/{slug}', [FrontController::class, 'show']);
+// Route::get('/{slug}', [FrontController::class, 'show']);
 
 // Backend
 Route::get('/dashboard', [DashboardController::class, 'index'])

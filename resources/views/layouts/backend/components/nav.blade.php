@@ -10,11 +10,6 @@
         </ul>
     </form>
     <ul class="navbar-nav navbar-right">
-        <li class="dropdown dropdown-list-toggle">
-            <a href="javascript:void(0)" id="toggle-theme" class="nav-link nav-link-lg">
-                <i class="fas fa-moon"></i>
-            </a>
-        </li>
         <li class="dropdown">
             <a href="javascript:void(0)" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user">

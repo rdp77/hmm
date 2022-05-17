@@ -46,4 +46,8 @@ class FrontController extends Controller
     public function show()
     {
     }
+
+    public function formula()
+    {
+    }
 }
