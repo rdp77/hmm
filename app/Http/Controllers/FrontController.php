@@ -49,5 +49,6 @@ class FrontController extends Controller
 
     public function formula()
     {
+        return view('pages.backend.formula');
     }
 }

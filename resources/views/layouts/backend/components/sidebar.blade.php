@@ -55,7 +55,7 @@
                         Request::route()->getName() == 'users.edit' ? 'active' : (
                             Request::route()->getName() == 'users.show' ? 'active' : ''))) }}">
                 <a href="{{ route('users.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-divide"></i>
                     <span>{{ __('MTBF') }}</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ Request::route()->getName() == 'users.index' ? 'active' : '' }}">
@@ -71,7 +71,7 @@
                         Request::route()->getName() == 'users.edit' ? 'active' : (
                             Request::route()->getName() == 'users.show' ? 'active' : ''))) }}">
                 <a href="{{ route('users.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-tools"></i>
                     <span>{{ __('MTTR') }}</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ Request::route()->getName() == 'users.index' ? 'active' : '' }}">
@@ -88,7 +88,7 @@
                         Request::route()->getName() == 'users.edit' ? 'active' : (
                             Request::route()->getName() == 'users.show' ? 'active' : ''))) }}">
                 <a href="{{ route('users.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-file-alt"></i>
                     <span>{{ __('MTBF') }}</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ Request::route()->getName() == 'users.index' ? 'active' : '' }}">
@@ -104,7 +104,7 @@
                         Request::route()->getName() == 'users.edit' ? 'active' : (
                             Request::route()->getName() == 'users.show' ? 'active' : ''))) }}">
                 <a href="{{ route('users.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-file-alt"></i>
                     <span>{{ __('MTTR') }}</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ Request::route()->getName() == 'users.index' ? 'active' : '' }}">
