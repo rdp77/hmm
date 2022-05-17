@@ -45,3 +45,6 @@ Route::prefix('server-monitor')->group(function () {
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/data/users.php';
+require __DIR__ . '/data/hardware.php';
+require __DIR__ . '/core/mtbf.php';
+require __DIR__ . '/core/mttr.php';
