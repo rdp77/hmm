@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Core;
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Template\MainController;
 use App\Models\Template\Log;
 use Illuminate\Http\Request;

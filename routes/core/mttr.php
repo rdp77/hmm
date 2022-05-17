@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\MTTRController;
+use App\Http\Controllers\Core\MTTRController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'data'], function () {
-    Route::resource('mttr', MTTRControllerntroller::class);
+    Route::resource('mttr', MTTRController::class);
 });
 
 Route::group(['prefix' => 'temp'], function () {

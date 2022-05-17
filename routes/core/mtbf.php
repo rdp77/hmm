@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\MTBFController;
+use App\Http\Controllers\Core\MTBFController;
 use Illuminate\Support\Facades\Route;
 
 /*

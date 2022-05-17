@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\HardwareController;
-use App\Http\Controllers\SparepartController;
+use App\Http\Controllers\Data\BrandController;
+use App\Http\Controllers\Data\HardwareController;
+use App\Http\Controllers\Data\SparepartController;
 use Illuminate\Support\Facades\Route;
 
 /*

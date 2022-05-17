@@ -31,54 +31,54 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item dropdown {{ Request::route()->getName() == 'users.index' ? 'active' : (
-                Request::route()->getName() == 'users.create' ? 'active' : (
-                        Request::route()->getName() == 'users.edit' ? 'active' : (
-                            Request::route()->getName() == 'users.show' ? 'active' : ''))) }}">
-                <a href="{{ route('users.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
+            <li class="nav-item dropdown {{ Request::route()->getName() == 'hardware.index' ? 'active' : (
+                Request::route()->getName() == 'hardware.create' ? 'active' : (
+                        Request::route()->getName() == 'hardware.edit' ? 'active' : (
+                            Request::route()->getName() == 'hardware.show' ? 'active' : ''))) }}">
+                <a href="{{ route('hardware.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
                     <i class="fas fa-microchip"></i>
                     <span>{{ __('Hardware') }}</span></a>
                 <ul class="dropdown-menu">
-                    <li class="{{ Request::route()->getName() == 'users.index' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('users.index') }}">{{ __('Daftar') }}</a>
+                    <li class="{{ Request::route()->getName() == 'hardware.index' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('hardware.index') }}">{{ __('Daftar') }}</a>
                     </li>
-                    <li class="{{ Request::route()->getName() == 'users.create' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('users.create') }}">{{ __('Merk') }}</a>
+                    <li class="{{ Request::route()->getName() == 'brand.index' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('brand.index') }}">{{ __('Merk') }}</a>
                     </li>
-                    <li class="{{ Request::route()->getName() == 'users.create' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('users.create') }}">{{ __('Sparepart') }}</a>
+                    <li class="{{ Request::route()->getName() == 'sparepart.index' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('sparepart.index') }}">{{ __('Sparepart') }}</a>
                     </li>
                 </ul>
             </li>
-            <li class="nav-item dropdown {{ Request::route()->getName() == 'users.index' ? 'active' : (
-                Request::route()->getName() == 'users.create' ? 'active' : (
-                        Request::route()->getName() == 'users.edit' ? 'active' : (
-                            Request::route()->getName() == 'users.show' ? 'active' : ''))) }}">
-                <a href="{{ route('users.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
+            <li class="nav-item dropdown {{ Request::route()->getName() == 'mtbf.index' ? 'active' : (
+                Request::route()->getName() == 'mtbf.create' ? 'active' : (
+                        Request::route()->getName() == 'mtbf.edit' ? 'active' : (
+                            Request::route()->getName() == 'mtbf.show' ? 'active' : ''))) }}">
+                <a href="{{ route('mtbf.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
                     <i class="fas fa-divide"></i>
                     <span>{{ __('MTBF') }}</span></a>
                 <ul class="dropdown-menu">
-                    <li class="{{ Request::route()->getName() == 'users.index' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('users.index') }}">{{ __('Daftar') }}</a>
+                    <li class="{{ Request::route()->getName() == 'mtbf.index' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('mtbf.index') }}">{{ __('Daftar') }}</a>
                     </li>
-                    <li class="{{ Request::route()->getName() == 'users.create' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('users.create') }}">{{ __('Tambah') }}</a>
+                    <li class="{{ Request::route()->getName() == 'mtbf.create' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('mtbf.create') }}">{{ __('Tambah') }}</a>
                     </li>
                 </ul>
             </li>
-            <li class="nav-item dropdown {{ Request::route()->getName() == 'users.index' ? 'active' : (
-                Request::route()->getName() == 'users.create' ? 'active' : (
-                        Request::route()->getName() == 'users.edit' ? 'active' : (
-                            Request::route()->getName() == 'users.show' ? 'active' : ''))) }}">
-                <a href="{{ route('users.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
+            <li class="nav-item dropdown {{ Request::route()->getName() == 'mttr.index' ? 'active' : (
+                Request::route()->getName() == 'mttr.create' ? 'active' : (
+                        Request::route()->getName() == 'mttr.edit' ? 'active' : (
+                            Request::route()->getName() == 'mttr.show' ? 'active' : ''))) }}">
+                <a href="{{ route('mttr.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
                     <i class="fas fa-tools"></i>
                     <span>{{ __('MTTR') }}</span></a>
                 <ul class="dropdown-menu">
-                    <li class="{{ Request::route()->getName() == 'users.index' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('users.index') }}">{{ __('Daftar') }}</a>
+                    <li class="{{ Request::route()->getName() == 'mttr.index' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('mttr.index') }}">{{ __('Daftar') }}</a>
                     </li>
-                    <li class="{{ Request::route()->getName() == 'users.create' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('users.create') }}">{{ __('Tambah') }}</a>
+                    <li class="{{ Request::route()->getName() == 'mttr.create' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('mttr.create') }}">{{ __('Tambah') }}</a>
                     </li>
                 </ul>
             </li>
