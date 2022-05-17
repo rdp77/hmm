@@ -22,10 +22,10 @@
                             </div>
                             <div class="mt-5 text-muted text-center">
                                 @if (Request::route()->getName() == 'login')
-                                {{ __('auth.noAccount') }}
+                                {{-- {{ __('auth.noAccount') }}
                                 <a href="{{ route('register') }}">
                                     {{ __('auth.createAccount') }}
-                                </a>
+                                </a> --}}
                                 @else
                                 {{ __('auth.haveAccount') }}
                                 <a href="{{ route('login') }}">
