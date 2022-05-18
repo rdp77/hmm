@@ -14,6 +14,12 @@
                     <i class="fas fa-fire"></i><span>{{ __('pages.dashboard') }}</span>
                 </a>
             </li>
+            <li class="{{ Request::route()->getName() == 'maintance' ? 'active' : (
+                Request::route()->getName() == 'dashboard.log' ? 'active' : '') }}">
+                <a href="{{ route('maintance') }}" class="nav-link">
+                    <i class="fas fa-toolbox"></i><span>{{ __('Maintance') }}</span>
+                </a>
+            </li>
             <li class="menu-header">{{ __('Data') }}</li>
             <li class="nav-item dropdown {{ Request::route()->getName() == 'users.index' ? 'active' : (
                 Request::route()->getName() == 'users.create' ? 'active' : (

@@ -72,4 +72,9 @@ class DashboardController extends Controller
             'lastRun'
         ));
     }
+
+    public function maintenance()
+    {
+        // return view('pages.backend.maintenance.indexMaintenance');
+    }
 }
