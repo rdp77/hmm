@@ -27,8 +27,8 @@ Route::get('/search', [FrontController::class, 'search'])
 // Backend
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
-Route::get('/maintance', [DashboardController::class, 'maintance'])
-    ->name('maintance');
+Route::get('/maintenance', [DashboardController::class, 'maintenance'])
+    ->name('maintenance');
 Route::get('/log', [DashboardController::class, 'log'])
     ->name('dashboard.log');
 // Debug

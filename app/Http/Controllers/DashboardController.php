@@ -75,6 +75,6 @@ class DashboardController extends Controller
 
     public function maintenance()
     {
-        // return view('pages.backend.maintenance.indexMaintenance');
+        return view('pages.backend.maintenance');
     }
 }

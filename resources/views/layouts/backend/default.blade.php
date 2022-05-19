@@ -11,6 +11,9 @@
                     <div class="section-header">
                         @yield('backToContent')
                         <h1>@yield('titleContent')</h1>
+                        <div class="section-header-button">
+                            @yield('ButtonHeader')
+                        </div>
                         <div class="section-header-breadcrumb">
                             <div class="breadcrumb-item active">@yield('breadcrumb')</div>
                             @yield('morebreadcrumb')
