@@ -15,7 +15,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
             <div class="card-icon bg-info">
                 <i class="far fa-user"></i>
@@ -30,7 +30,37 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+        <div class="card card-statistic-1">
+            <div class="card-icon bg-danger">
+                <i class="far fa-hard-drive"></i>
+            </div>
+            <div class="card-wrap">
+                <div class="card-header">
+                    <h4>{{ __('Total Hardware') }}</h4>
+                </div>
+                <div class="card-body">
+                    {{ $logCount }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+        <div class="card card-statistic-1">
+            <div class="card-icon bg-success">
+                <i class="far fa-copyright"></i>
+            </div>
+            <div class="card-wrap">
+                <div class="card-header">
+                    <h4>{{ __('Total Brand') }}</h4>
+                </div>
+                <div class="card-body">
+                    {{ $logCount }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
             <div class="card-icon bg-warning">
                 <i class="far fa-list-alt"></i>

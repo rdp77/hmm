@@ -176,4 +176,9 @@ class MainController extends Controller
     {
         QrCode::style('round')->generate($data);
     }
+
+    public function dayToHours($day)
+    {
+        return $day * 24;
+    }
 }
