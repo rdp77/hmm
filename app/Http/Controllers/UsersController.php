@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Template\MainController;
+use App\Http\Requests\Users\UsersRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,27 +62,12 @@ class UsersController extends Controller
         return view('pages.backend.data.users.createUsers');
     }
 
-    public function store(Request $req)
+    public function store(UsersRequest $req)
     {
-        $validator = Validator::make($req->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-
-        $validator = $this->MainController
-            ->validator($validator->errors()->all());
-
-        if (count($validator) != 0) {
-            return Response::json([
-                'status' => 'error',
-                'data' => $validator
-            ]);
-        }
-
         User::create([
             'name' => $req->name,
             'username' => $req->username,
+            'email' => $req->email,
             'password' => Hash::make($req->password),
             'created_by' => Auth::user()->name,
             'updated_by' => '',

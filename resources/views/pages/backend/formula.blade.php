@@ -33,6 +33,16 @@
                     </div>
                 </div>
             </div>
+            <div class="media">
+                <div class="media-icon"><i class="far fa-circle"></i></div>
+                <div class="media-body">
+                    <h6>{{ __('Availibility') }}</h6>
+                    <p>by Marina D</p>
+                    <div class="text-center">
+                        <img class="img-responsive m-5" src="{{ asset('assets/img/mtbf.svg') }}">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

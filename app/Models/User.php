@@ -19,9 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
         'username',
+        'email',
         'password',
+        'is_admin',
         'created_by',
         'updated_by',
         'deleted_at',
@@ -44,6 +45,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'is_admin' => 'boolean'
     ];
+
+    public function getRolesAttributes()
+    {
+        if ($this->isAdmin == 1) {
+            return 'Admin';
+        } else {
+            return 'User';
+        }
+    }
 }
