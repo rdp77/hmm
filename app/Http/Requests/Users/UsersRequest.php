@@ -2,12 +2,13 @@
 
 namespace App\Http\Requests\Users;
 
-use App\Http\Controllers\Template\MainController;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Validation\Rule;
 
 class UsersRequest extends FormRequest
 {
@@ -28,12 +29,28 @@ class UsersRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        if (Request::route()->getName() == 'users.store') {
+            $username = 'unique:users,username';
+            $email = 'unique:users,email';
+            $password = 'required';
+        } elseif (Request::route()->getName() == 'users.update') {
+            $username = Rule::unique('users', 'username')->ignore(
+                $this->route('user')
+            );
+            $email = Rule::unique('users', 'email')->ignore(
+                $this->route('user')
+            );
+            $password = 'nullable';
+        }
+
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users,username'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'username' => ['required', 'string', 'max:255', $username],
+            'email' => ['required', 'email', 'max:255', $email],
+            'password' => [$password, 'string', 'min:8', 'confirmed'],
         ];
+
+        return $rules;
     }
 
     /**

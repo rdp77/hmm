@@ -92,23 +92,8 @@ class UsersController extends Controller
         return view('pages.backend.data.users.updateUsers', ['user' => $user]);
     }
 
-    public function update($id, Request $req)
+    public function update($id, UsersRequest $req)
     {
-        $validator = Validator::make($req->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-        ]);
-
-        $validator = $this->MainController
-            ->validator($validator->errors()->all());
-
-        if (count($validator) != 0) {
-            return Response::json([
-                'status' => 'error',
-                'data' => $validator
-            ]);
-        }
-
         $this->MainController->createLog(
             $req->header('user-agent'),
             $req->ip(),
