@@ -11,12 +11,6 @@ use Illuminate\Support\Facades\Response;
 
 class UsersRequest extends FormRequest
 {
-
-    public function __construct(MainController $MainController)
-    {
-        $this->MainController = $MainController;
-    }
-
     /**
      * Determine if the user is authorized to make this request.
      *
