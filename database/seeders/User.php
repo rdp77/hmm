@@ -22,6 +22,7 @@ class User extends Seeder
                 'email' => 'contact@wreative.com',
                 'username' => 'admin',
                 'password' => Hash::make('admin'),
+                'is_admin' => true,
                 'updated_by' => 'Wreative',
                 'created_by' => 'Wreative',
                 'deleted_by' => 'Wreative',
