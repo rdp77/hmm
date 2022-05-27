@@ -25,7 +25,7 @@
     </div>
     @enderror
     <div class="form-group">
-        <label for="login">{{ __('auth.username atau Email') }}</label>
+        <label for="login">{{ __('Username atau Email') }}</label>
         <input id="login" type="text" class="form-control @error('login') is-invalid @enderror" name="login"
             tabindex="1" required autocomplete="username" autofocus>
     </div>

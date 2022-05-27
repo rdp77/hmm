@@ -48,9 +48,9 @@ class User extends Authenticatable
         'is_admin' => 'boolean'
     ];
 
-    public function getRolesAttributes()
+    public function getRolesAttributes(): string
     {
-        if ($this->isAdmin == 1) {
+        if ($this->isAdmin == true) {
             return 'Admin';
         } else {
             return 'User';
