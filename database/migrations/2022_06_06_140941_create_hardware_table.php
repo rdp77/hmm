@@ -1,0 +1,45 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateHardwareTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('hardware', function (Blueprint $table) {
+            $table->id();
+            // Barcode
+            $table->string('serial_number')->nullable();
+            $table->string('name');
+            $table->string('description')->nullable();
+            $table->string('model')->nullable();
+            $table->foreignId('brand_id')->constrained('brands');
+            // $table->string('type')->nullable();
+            $table->enum('status', ['baru', 'rusak'])->default('baru');
+            $table->date('purchase_date')->nullable();
+            $table->date('warranty_date')->nullable();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->softDeletes();
+            $table->string('deleted_by')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('hardware');
+    }
+}
