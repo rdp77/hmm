@@ -24,6 +24,7 @@ var table = $("#table").DataTable({
         { data: "url" },
         { data: "ip" },
         { data: "user_agent" },
+        { data: "user" },
     ],
     buttons: [
         {

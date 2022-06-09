@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Template;
 use App\Http\Controllers\Controller;
 use App\Models\Template\City;
 use App\Models\Template\District;
-use App\Models\Template\Log;
 use App\Models\Template\Village;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -150,16 +149,28 @@ class MainController extends Controller
         return Response::json($data);
     }
 
-    public function createLog($header, $ip, $action)
+    public function createLog($header, $ip, $action, $withPerformedOn = false, $performedOn = null)
     {
-        Log::create([
-            'info' => $action,
-            'u_id' => Auth::user()->id,
-            'url' => URL::full(),
-            'user_agent' => $header,
-            'ip' => $ip,
-            'added_at' => date("Y-m-d H:i:s"),
-        ]);
+        if ($withPerformedOn) {
+            activity()
+                ->causedBy(Auth::user()->id)
+                ->performedOn($performedOn)
+                ->withProperties([
+                    'url' => URL::full(),
+                    'ip' => $ip,
+                    'user_agent' => $header
+                ])
+                ->log($action);
+        } else {
+            activity()
+                ->causedBy(Auth::user()->id)
+                ->withProperties([
+                    'url' => URL::full(),
+                    'ip' => $ip,
+                    'user_agent' => $header
+                ])
+                ->log($action);
+        }
     }
 
     public function serverMonitorRefreshAll(): array

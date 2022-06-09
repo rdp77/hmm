@@ -29,8 +29,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 Route::get('/maintenance', [DashboardController::class, 'maintenance'])
     ->name('maintenance');
-Route::get('/log', [DashboardController::class, 'log'])
-    ->name('dashboard.log');
 // Debug
 Route::get('/debug-sentry', function () {
     throw new Exception('My first Sentry error!');
@@ -47,6 +45,7 @@ Route::prefix('server-monitor')->group(function () {
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/data/users.php';
+require __DIR__ . '/data/activity.php';
 require __DIR__ . '/data/hardware.php';
 require __DIR__ . '/core/mtbf.php';
 require __DIR__ . '/core/mttr.php';

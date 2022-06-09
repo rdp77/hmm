@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Template\MainController;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Template\ActivityList;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +42,8 @@ class AuthenticatedSessionController extends Controller
         $this->MainController->createLog(
             $request->header('user-agent'),
             $request->ip(),
-            'Melakukan login'
+            $this->getStatus(1),
+            false
         );
 
         return redirect()->intended(RouteServiceProvider::HOME);
@@ -58,7 +60,8 @@ class AuthenticatedSessionController extends Controller
         $this->MainController->createLog(
             $request->header('user-agent'),
             $request->ip(),
-            'Melakukan logout'
+            $this->getStatus(2),
+            false
         );
 
         Auth::guard('web')->logout();
@@ -68,5 +71,10 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    protected function getStatus($type)
+    {
+        return ActivityList::find($type)->name;
     }
 }
