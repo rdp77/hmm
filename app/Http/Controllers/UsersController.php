@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Template\MainController;
 use App\Http\Requests\UsersRequest;
+use App\Models\Template\ActivityList;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,17 +65,21 @@ class UsersController extends Controller
     public function store(UsersRequest $req)
     {
         $validated = $req->validated();
-        User::create([
+        $performedOn = User::create([
             'name' => $validated['name'],
             'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'created_by' => Auth::user()->name,
-            'updated_by' => '',
-            'deleted_by' => ''
         ]);
 
-        $this->createLog($req->header('user-agent'), $req->ip(), 1);
+        // Create Log
+        $this->MainController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            $this->getStatus(3),
+            true,
+            User::find($performedOn->id)
+        );
 
         return Response::json([
             'status' => 'success',
@@ -100,7 +105,14 @@ class UsersController extends Controller
                 'updated_by' => Auth::user()->name
             ]);
 
-        $this->createLog($req->header('user-agent'), $req->ip(), 2, false, User::find($id)->name);
+        // Create Log
+        $this->MainController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            $this->getStatus(4),
+            true,
+            User::find($id)
+        );
 
         return Response::json([
             'status' => 'success',
@@ -116,7 +128,13 @@ class UsersController extends Controller
 
         User::destroy($id);
 
-        $this->createLog($req->header('user-agent'), $req->ip(), 3);
+        // Create Log
+        $this->MainController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            $this->getStatus(5),
+            false
+        );
 
         return Response::json(['status' => 'success']);
     }
@@ -149,7 +167,14 @@ class UsersController extends Controller
         $user->deleted_by = '';
         $user->save();
 
-        $this->createLog($req->header('user-agent'), $req->ip(), 4);
+        // Create Log
+        $this->MainController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            $this->getStatus(6),
+            true,
+            User::find($id)
+        );
 
         return Response::json(['status' => 'success']);
     }
@@ -160,7 +185,13 @@ class UsersController extends Controller
             ->where('id', $id)
             ->forceDelete();
 
-        $this->createLog($req->header('user-agent'), $req->ip(), 5);
+        // Create Log
+        $this->MainController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            $this->getStatus(5),
+            false
+        );
 
         return Response::json(['status' => 'success']);
     }
@@ -179,7 +210,13 @@ class UsersController extends Controller
             $user;
         }
 
-        $this->createLog($req->header('user-agent'), $req->ip(), 6);
+        // Create Log
+        $this->MainController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            $this->getStatus(6),
+            false
+        );
 
         return Response::json(['status' => 'success']);
     }
@@ -191,7 +228,14 @@ class UsersController extends Controller
                 'password' => Hash::make(1234567890),
             ]);
 
-        $this->createLog($req->header('user-agent'), $req->ip(), 7, false, User::find($id)->name);
+        // Create Log
+        $this->MainController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            $this->getStatus(7),
+            true,
+            User::find($id)
+        );
 
         return Redirect::route('users.index')
             ->with([
@@ -208,13 +252,13 @@ class UsersController extends Controller
 
         $user = User::find(Auth::user()->id);
 
-        $this->createLog(
+        // Create Log
+        $this->MainController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            0,
+            $this->getStatus(0, true, 'Mengganti nama ' . $user->name . ' menjadi ' . $req->name),
             true,
-            null,
-            'Mengganti nama ' . $user->name . ' menjadi ' . $req->name
+            $user
         );
 
         $oldName = $user->name;
@@ -233,39 +277,8 @@ class UsersController extends Controller
         return view('auth.forgot-password');
     }
 
-    protected function createLog($userAgent, $ip, $type, $custom = false, $desc = null, $message = null)
+    protected function getStatus($type, $custom = false, $message = null)
     {
-        switch ($type) {
-            case 1:
-                $status = "membuat pengguna baru";
-                break;
-            case 2:
-                $status = "mengubah pengguna";
-                break;
-            case 3:
-                $status = "menghapus data pengguna ke recycle bin";
-                break;
-            case 4:
-                $status = "mengembalikan data pengguna";
-                break;
-            case 5:
-                $status = "menghapus data pengguna secara permanen";
-                break;
-            case 6:
-                $status = "menghapus semua data pengguna secara permanen";
-                break;
-            case 7:
-                $status = "reset password pengguna";
-                break;
-            default:
-                $status = "";
-                break;
-        }
-
-        $this->MainController->createLog(
-            $userAgent,
-            $ip,
-            $custom ? $message : Auth::user()->name . ' ' . $status . ' ' . $desc,
-        );
+        return $custom ? $message : ActivityList::find($type)->name;
     }
 }

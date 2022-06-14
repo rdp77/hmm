@@ -20,10 +20,7 @@ class CreateBrandsTable extends Migration
             $table->string('phone', 13);
             $table->string('email', 25);
             $table->string('webite', 30);
-            $table->string('created_by')->nullable();
-            $table->string('updated_by')->nullable();
             $table->softDeletes();
-            $table->string('deleted_by')->nullable();
             $table->timestamps();
         });
     }

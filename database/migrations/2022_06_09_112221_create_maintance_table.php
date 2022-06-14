@@ -19,10 +19,7 @@ class CreateMaintanceTable extends Migration
             $table->bigInteger('mttr');
             $table->foreignId('hardware_id')->constrained('hardware');
             $table->foreignId('mt_id')->constrained('mt_dt');
-            $table->string('created_by')->nullable();
-            $table->string('updated_by')->nullable();
             $table->softDeletes();
-            $table->string('deleted_by')->nullable();
             $table->timestamps();
         });
     }

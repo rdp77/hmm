@@ -18,10 +18,7 @@ class CreateSparepartsTable extends Migration
             $table->string('name');
             $table->integer('stock');
             $table->foreignId('brand_id')->constrained('brands');
-            $table->string('created_by')->nullable();
-            $table->string('updated_by')->nullable();
             $table->softDeletes();
-            $table->string('deleted_by')->nullable();
             $table->timestamps();
         });
     }
