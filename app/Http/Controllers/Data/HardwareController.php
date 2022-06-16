@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Str;
+use Milon\Barcode\Facades\DNS1DFacade;
+use Milon\Barcode\Facades\DNS2DFacade;
 
 class HardwareController extends Controller
 {
@@ -39,25 +42,45 @@ class HardwareController extends Controller
             $data = Hardware::all();
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('status', function ($row) {
+                    if ($row->status->value == 'baru') {
+                        $status = '<span class="badge badge-success">';
+                    } else if ($row->status->value == 'normal') {
+                        $status = '<span class="badge badge-primary">';
+                    } else {
+                        $status = '<span class="badge badge-danger">';
+                    }
+                    $status .= Str::headline($row->status->value);
+                    $status .= '</span>';
+                    return $status;
+                })
                 ->addColumn('brand', function ($row) {
                     return $row->brand->name;
                 })
                 ->addColumn('purchase_date', function ($row) {
-                    return Carbon::parse($row->purchase_date)->locale('id')->isoFormat('dddd, d-MMM-OY');
+                    if ($row->purchase_date == null) {
+                        return '-';
+                    } else {
+                        return Carbon::parse($row->purchase_date)->isoFormat('dddd, D-MMM-Y');
+                    }
                 })
                 ->addColumn('warranty_date', function ($row) {
-                    return Carbon::parse($row->warranty_date)->locale('id')->isoFormat('dddd, d-MMM-OY');
+                    if ($row->warranty_date == null) {
+                        return '-';
+                    } else {
+                        return Carbon::parse($row->warranty_date)->isoFormat('dddd, D-MMM-Y');
+                    }
                 })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<a class="btn btn-icon btn-success btn-block m-1"';
-                    $actionBtn .= 'href="' . route('hardware.edit', $row->id) . '"><i class="fa-solid fa-barcode"></i></a>';
+                    $actionBtn .= 'href="' . route('hardware.show', $row->id) . '"><i class="fa-solid fa-barcode"></i></a>';
                     $actionBtn .= '<a class="btn btn-icon btn-primary btn-block m-1"';
                     $actionBtn .= 'href="' . route('hardware.edit', $row->id) . '"><i class="far fa-edit"></i></a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="btn btn-icon btn-danger btn-block m-1"';
                     $actionBtn .= 'style="cursor:pointer;color:white"><i class="fas fa-trash"></i></a>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'brand', 'purchase_date', 'warranty_date'])
+                ->rawColumns(['action', 'brand', 'purchase_date', 'warranty_date', 'status'])
                 ->make(true);
         }
 
@@ -78,8 +101,22 @@ class HardwareController extends Controller
 
     public function store(HardwareRequest $req)
     {
-        $validated = $req->validated();
-        $performedOn = Hardware::create($validated);
+        $purchaseDate = $req->purchase_date == null ? null :
+            $this->MainController->ChangeMonthIdToEn($req->purchase_date);
+        $warrantyDate = $req->warranty_date == null ? null :
+            $this->MainController->ChangeMonthIdToEn($req->warranty_date);
+
+        $performedOn = Hardware::create([
+            'name' => $req->name,
+            'code' => $req->code,
+            'serial_number' => $req->serial_number,
+            'model' => $req->model,
+            'brand_id' => $req->brand_id,
+            'description' => $req->description,
+            'purchase_date' => $purchaseDate,
+            'warranty_date' => $warrantyDate,
+            'status' => $req->status
+        ]);
 
         // Create Log
         $this->MainController->createLog(
@@ -110,16 +147,20 @@ class HardwareController extends Controller
 
     public function update($id, HardwareRequest $req)
     {
+        $purchaseDate = $req->purchase_date == null ? null :
+            $this->MainController->ChangeMonthIdToEn($req->purchase_date);
+        $warrantyDate = $req->warranty_date == null ? null :
+            $this->MainController->ChangeMonthIdToEn($req->warranty_date);
+
         Hardware::where('id', $id)
             ->update([
                 'name' => $req->name,
-                'code' => $req->code,
                 'serial_number' => $req->serial_number,
                 'model' => $req->model,
                 'brand_id' => $req->brand_id,
                 'description' => $req->description,
-                'purchase_date' => $this->MainController->ChangeMonthIdToEn($req->purchase_date),
-                'warranty_date' => $this->MainController->ChangeMonthIdToEn($req->warranty_date),
+                'purchase_date' => $purchaseDate,
+                'warranty_date' => $warrantyDate,
                 'status' => $req->status
             ]);
 
@@ -162,14 +203,34 @@ class HardwareController extends Controller
             $data = Hardware::onlyTrashed()->get();
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('status', function ($row) {
+                    if ($row->status->value == 'baru') {
+                        $status = '<span class="badge badge-success">';
+                    } else if ($row->status->value == 'normal') {
+                        $status = '<span class="badge badge-primary">';
+                    } else {
+                        $status = '<span class="badge badge-danger">';
+                    }
+                    $status .= Str::headline($row->status->value);
+                    $status .= '</span>';
+                    return $status;
+                })
                 ->addColumn('brand', function ($row) {
                     return $row->brand->name;
                 })
                 ->addColumn('purchase_date', function ($row) {
-                    return Carbon::parse($row->purchase_date)->locale('id')->isoFormat('dddd, d-MMM-OY');
+                    if ($row->purchase_date == null) {
+                        return '-';
+                    } else {
+                        return Carbon::parse($row->purchase_date)->isoFormat('dddd, D-MMM-Y');
+                    }
                 })
                 ->addColumn('warranty_date', function ($row) {
-                    return Carbon::parse($row->warranty_date)->locale('id')->isoFormat('dddd, d-MMM-OY');
+                    if ($row->warranty_date == null) {
+                        return '-';
+                    } else {
+                        return Carbon::parse($row->warranty_date)->isoFormat('dddd, D-MMM-Y');
+                    }
                 })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<button onclick="restore(' . $row->id . ')" class="btn btn btn-primary 
@@ -178,7 +239,7 @@ class HardwareController extends Controller
                     btn-action mb-1 mt-1">Hapus</button>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'brand', 'purchase_date', 'warranty_date'])
+                ->rawColumns(['action', 'brand', 'purchase_date', 'warranty_date', 'status'])
                 ->make(true);
         }
         return view('pages.backend.data.hardware.recycleHardware');
@@ -265,5 +326,18 @@ class HardwareController extends Controller
                 return $code;
             }
         }
+    }
+
+    public function show($id)
+    {
+        $hardware = Hardware::find($id);
+        $barcode = DNS2DFacade::getBarcodeHTML($hardware->code, 'QRCODE');
+        $serial_number = DNS1DFacade::getBarcodeHTML($hardware->serial_number, 'C128');
+
+        return view('pages.backend.data.hardware.showHardware', [
+            'hardware' => $hardware,
+            'barcode' => $barcode,
+            'serial_number' => $serial_number
+        ]);
     }
 }

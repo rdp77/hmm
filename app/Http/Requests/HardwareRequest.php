@@ -29,7 +29,6 @@ class HardwareRequest extends FormRequest
     {
 
         $rules = [
-            'code' => ['required'],
             'name' => ['required', 'string', 'max:255'],
             'brand_id' => ['required', 'integer'],
             'status' => ['required']

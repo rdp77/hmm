@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Template\MainController;
+use App\Models\Hardware;
 use App\Models\Template\Log;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -34,13 +35,13 @@ class FrontController extends Controller
         return view('home');
     }
 
-    public function search(Request $request)
+    public function search($code)
     {
-        $code = $this->MainController->createCode('MT-', 'users');
+        $check = Hardware::where('code', $code)->first();
 
-        return Redirect::route('pages.frontend.search')
-            ->with('data', $code);
-        // return view('pages.frontend.search', compact('code'));
+
+        return $check ? response()->json(['status' => 'success', 'data' => $check]) :
+            response()->json(['status' => 'error', 'data' => 'Data Hardware Tidak Ada'], 404);
     }
 
     public function show()

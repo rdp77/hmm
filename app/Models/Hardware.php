@@ -31,7 +31,7 @@ class Hardware extends Model
         'brand_id',
         'status',
         'purchase_date',
-        'warranty_date',
+        'warranty_date'
     ];
 
     /**
@@ -40,7 +40,7 @@ class Hardware extends Model
      * @var array
      */
     protected $casts = [
-        'status' => HardwareStatusEnum::class,
+        'status' => HardwareStatusEnum::class
     ];
 
     public function brand()

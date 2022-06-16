@@ -13,14 +13,12 @@
             <i class="fas fa-fingerprint"></i>
         </div>
     </div>
-    <input type="text" id="submit" name="maintance" class="form-control" placeholder="Kode Unik Maintance">
+    <input type="text" id="submit" name="maintance" class="form-control" maxlength="10" minlength="10"
+        placeholder="Kode Unik Hardware" autofocus>
 </div>
 @endsection
 
 @section('script')
-<script type="text/javascript">
-    var url = "{{ route('search') }}";
-</script>
 <script src="https://unpkg.com/html5-qrcode@2.2.1/html5-qrcode.min.js" type="text/javascript"></script>
 <script src="{{ asset('assets/pages/front.js') }}" type="text/javascript"></script>
 @endsection

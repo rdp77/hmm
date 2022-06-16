@@ -30,7 +30,7 @@ class BrandsRequest extends FormRequest
 
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['email'],
+            'email' => ['nullable', 'email'],
         ];
 
         return $rules;

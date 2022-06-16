@@ -20,7 +20,7 @@ use App\Http\Controllers\Template\MainController;
 Route::get('/', [FrontController::class, 'index']);
 Route::get('/formula', [FrontController::class, 'formula'])
     ->name('formula');
-Route::get('/search', [FrontController::class, 'search'])
+Route::get('/search/{code}', [FrontController::class, 'search'])
     ->name('search');
 // Route::get('/{slug}', [FrontController::class, 'show']);
 

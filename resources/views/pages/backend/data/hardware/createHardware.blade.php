@@ -46,13 +46,27 @@
                             <div class="d-block">
                                 <label class="control-label">{{ __('Tanggal Pembelian') }}</label>
                             </div>
-                            <input type="text" name="purchase_date" class="form-control datepicker">
+                            <div class="input-group mb-3">
+                                <input type="text" name="purchase_date" class="form-control datepicker" readonly>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" id="datePurchase" type="button">
+                                        {{ __('Kosongkan') }}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <div class="d-block">
                                 <label class="control-label">{{ __('Tanggal Garansi') }}</label>
                             </div>
-                            <input type="text" name="warranty_date" class="form-control datepicker">
+                            <div class="input-group mb-3">
+                                <input type="text" name="warranty_date" class="form-control datepicker" readonly>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" id="dateWarranty" type="button">
+                                        {{ __('Kosongkan') }}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <div class="d-block">
@@ -97,4 +111,5 @@
     var index = '{{ route('hardware.index') }}';
 </script>
 <script src="{{ asset('assets/pages/stored.js') }}"></script>
+<script src="{{ asset('assets/pages/data/hardware/customHardware.js') }}"></script>
 @endsection

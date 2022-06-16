@@ -88,6 +88,11 @@ class MainController extends Controller
         return $year . '-' . $month . '-' . $day;
     }
 
+    public function changeDateEnToId($date)
+    {
+        return Carbon::parse($date)->format('d M Y');
+    }
+
     public function createCode($prefix, $table)
     {
         $user = Auth::check() ? Auth::id() : 00;

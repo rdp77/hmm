@@ -1,3 +1,4 @@
+@inject('function', 'App\Http\Controllers\Template\MainController')
 @extends('layouts.backend.default')
 @section('title', __('pages.title').__(' | Edit Hardware'))
 @section('backToContent')
@@ -17,7 +18,6 @@
 </p>
 <div class="card">
     <form id="stored">
-        <input type="hidden" name="code" value="{{ $hardware->code }}">
         <div class="card-body">
             <div class="row">
                 <div class="col">
@@ -46,15 +46,29 @@
                         <div class="d-block">
                             <label class="control-label">{{ __('Tanggal Pembelian') }}</label>
                         </div>
-                        <input type="text" name="purchase_date" value="{{ $hardware->purchase_date }}"
-                            class="form-control datepicker">
+                        <div class="input-group mb-3">
+                            <input type="text" name="purchase_date" class="form-control datepicker"
+                                value="{{ $function->changeDateEnToId($hardware->purchase_date) }}" readonly>
+                            <div class=" input-group-append">
+                                <button class="btn btn-primary" id="datePurchase" type="button">
+                                    {{ __('Kosongkan') }}
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <div class="d-block">
                             <label class="control-label">{{ __('Tanggal Garansi') }}</label>
                         </div>
-                        <input type="text" name="warranty_date" value="{{ $hardware->warranty_date }}"
-                            class="form-control datepicker">
+                        <div class="input-group mb-3">
+                            <input type="text" name="warranty_date" class="form-control datepicker"
+                                value="{{ $function->changeDateEnToId($hardware->warranty_date) }}" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" id="dateWarranty" type="button">
+                                    {{ __('Kosongkan') }}
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <div class="d-block">
@@ -99,6 +113,9 @@
 <script>
     var url = '{{ route('hardware.update',$hardware->id) }}';
     var index = '{{ route('hardware.index') }}';
+    var warranty_date = '{{ $hardware->warranty_date }}';
+    var purchase_date = '{{ $hardware->purchase_date }}';
 </script>
 <script src="{{ asset('assets/pages/stored.js') }}"></script>
+<script src="{{ asset('assets/pages/data/hardware/customHardware.js') }}"></script>
 @endsection

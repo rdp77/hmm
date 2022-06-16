@@ -4,14 +4,24 @@ $.ajaxSetup({
     },
 });
 
-function submitForm(data) {
+function submitForm(code) {
     $.ajax({
         type: "GET",
-        url: url,
-        data: data,
+        url: "/search/" + code,
+        code: code,
         success: function (result) {
-            console.log(result);
-            // redirect to slug code
+            iziToast.error({
+                title: "Error",
+                message: result.status,
+            });
+        },
+        statusCode: {
+            404: function (response) {
+                iziToast.error({
+                    title: "Error",
+                    message: response.responseJSON.data,
+                });
+            },
         },
     });
     return false;
