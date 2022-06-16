@@ -17,37 +17,42 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'data'], function () {
-    Route::resource('hardware', HardwareController::class);
-    Route::resource('brand', BrandController::class);
-    Route::resource('sparepart', SparepartController::class);
+    Route::resources([
+        'hardware' => HardwareController::class,
+        'brand' => BrandController::class,
+        'sparepart' => SparepartController::class
+    ]);
 });
 
 Route::group(['prefix' => 'temp'], function () {
-    // Hardware
-    Route::get('/hardware', [HardwareController::class, 'recycle'])
-        ->name('hardware.recycle');
-    Route::group(['prefix' => 'hardware'], function () {
-        Route::get('/restore/{id}', [HardwareController::class, 'restore'])
-            ->name('hardware.restore');;
-        Route::delete('/delete/{id}', [HardwareController::class, 'delete']);
-        Route::delete('/delete-all', [HardwareController::class, 'deleteAll']);
+    Route::controller(HardwareController::class)->group(function () {
+        Route::get('/hardware', 'recycle')
+            ->name('hardware.recycle');
+        Route::group(['prefix' => 'hardware'], function () {
+            Route::get('/restore/{id}', 'restore')
+                ->name('hardware.restore');
+            Route::delete('/delete/{id}', 'delete');
+            Route::delete('/delete-all', 'deleteAll');
+        });
     });
-    // Brand
-    Route::get('/brand', [BrandController::class, 'recycle'])
-        ->name('brand.recycle');
-    Route::group(['prefix' => 'brand'], function () {
-        Route::get('/restore/{id}', [BrandController::class, 'restore'])
-            ->name('brand.restore');;
-        Route::delete('/delete/{id}', [BrandController::class, 'delete']);
-        Route::delete('/delete-all', [BrandController::class, 'deleteAll']);
+    Route::controller(BrandController::class)->group(function () {
+        Route::get('/brand', 'recycle')
+            ->name('brand.recycle');
+        Route::group(['prefix' => 'brand'], function () {
+            Route::get('/restore/{id}', 'restore')
+                ->name('brand.restore');
+            Route::delete('/delete/{id}', 'delete');
+            Route::delete('/delete-all', 'deleteAll');
+        });
     });
-    // Sparepart
-    Route::get('/sparepart', [SparepartController::class, 'recycle'])
-        ->name('sparepart.recycle');
-    Route::group(['prefix' => 'sparepart'], function () {
-        Route::get('/restore/{id}', [SparepartController::class, 'restore'])
-            ->name('sparepart.restore');;
-        Route::delete('/delete/{id}', [SparepartController::class, 'delete']);
-        Route::delete('/delete-all', [SparepartController::class, 'deleteAll']);
+    Route::controller(SparepartController::class)->group(function () {
+        Route::get('/sparepart', 'recycle')
+            ->name('sparepart.recycle');
+        Route::group(['prefix' => 'sparepart'], function () {
+            Route::get('/restore/{id}', 'restore')
+                ->name('sparepart.restore');
+            Route::delete('/delete/{id}', 'delete');
+            Route::delete('/delete-all', 'deleteAll');
+        });
     });
 });

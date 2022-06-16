@@ -43,20 +43,6 @@ class ActivityRequest extends FormRequest
     }
 
     /**
-     * Custom message for validation
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'name_type.required' => 'Kolom Tipe Nama harus di isi',
-            'name_activity.required' => 'Kolom Nama Aktivitas harus di isi',
-            'type.required' => 'Tipe harus dipilih',
-        ];
-    }
-
-    /**
      * Configure the validator instance.
      *
      * @param  \Illuminate\Validation\Validator  $validator

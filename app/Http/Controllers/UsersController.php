@@ -95,15 +95,8 @@ class UsersController extends Controller
 
     public function update($id, UsersRequest $req)
     {
-        $createdBy = User::find($id)->created_by;
-
         User::where('id', $id)
-            ->update([
-                'name' => $req->name,
-                'username' => $req->username,
-                'created_by' => $createdBy,
-                'updated_by' => Auth::user()->name
-            ]);
+            ->update($req->except('_token', '_method'));
 
         // Create Log
         $this->MainController->createLog(
@@ -123,8 +116,6 @@ class UsersController extends Controller
     public function destroy(Request $req, $id)
     {
         $user = User::find($id);
-        $user->deleted_by = Auth::user()->name;
-        $user->save();
 
         User::destroy($id);
 
@@ -133,7 +124,8 @@ class UsersController extends Controller
             $req->header('user-agent'),
             $req->ip(),
             $this->getStatus(5),
-            false
+            true,
+            $user
         );
 
         return Response::json(['status' => 'success']);
@@ -164,8 +156,6 @@ class UsersController extends Controller
             ->restore();
 
         $user = User::find($id);
-        $user->deleted_by = '';
-        $user->save();
 
         // Create Log
         $this->MainController->createLog(
@@ -173,7 +163,7 @@ class UsersController extends Controller
             $req->ip(),
             $this->getStatus(6),
             true,
-            User::find($id)
+            $user
         );
 
         return Response::json(['status' => 'success']);
@@ -189,7 +179,7 @@ class UsersController extends Controller
         $this->MainController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            $this->getStatus(5),
+            $this->getStatus(7),
             false
         );
 
@@ -214,7 +204,7 @@ class UsersController extends Controller
         $this->MainController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            $this->getStatus(6),
+            $this->getStatus(8),
             false
         );
 
@@ -223,6 +213,8 @@ class UsersController extends Controller
 
     function reset($id, Request $req)
     {
+        $user = User::find($id);
+
         User::where('id', $id)
             ->update([
                 'password' => Hash::make(1234567890),
@@ -232,14 +224,14 @@ class UsersController extends Controller
         $this->MainController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            $this->getStatus(7),
+            $this->getStatus(9),
             true,
-            User::find($id)
+            $user
         );
 
         return Redirect::route('users.index')
             ->with([
-                'status' => 'Password untuk pengguna ' . User::find($id)->name . ' telah diganti menjadi \'1234567890\'',
+                'status' => 'Password untuk pengguna ' . $user->name . ' telah diganti menjadi \'1234567890\'',
                 'type' => 'success'
             ]);
     }

@@ -26,4 +26,9 @@ class Spareparts extends Model
         'stock',
         'brand_id'
     ];
+
+    public function brand()
+    {
+        return $this->belongsTo(Brands::class, 'brand_id');
+    }
 }

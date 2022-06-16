@@ -15,11 +15,11 @@ class CreateBrandsTable extends Migration
     {
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 25);
-            $table->string('address', 50);
-            $table->string('phone', 13);
-            $table->string('email', 25);
-            $table->string('webite', 30);
+            $table->string('name');
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->string('website')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

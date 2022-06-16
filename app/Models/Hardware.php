@@ -15,7 +15,7 @@ class Hardware extends Model
      *
      * @var string
      */
-    protected $table = 'spareparts';
+    protected $table = 'hardware';
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +23,7 @@ class Hardware extends Model
      * @var array
      */
     protected $fillable = [
+        'code',
         'serial_number',
         'name',
         'description',
@@ -41,4 +42,9 @@ class Hardware extends Model
     protected $casts = [
         'status' => HardwareStatusEnum::class,
     ];
+
+    public function brand()
+    {
+        return $this->belongsTo(Brands::class, 'brand_id');
+    }
 }

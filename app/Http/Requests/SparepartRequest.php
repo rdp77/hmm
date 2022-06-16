@@ -6,11 +6,9 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Validation\Rule;
 
-class UsersRequest extends FormRequest
+class SparepartRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,25 +27,11 @@ class UsersRequest extends FormRequest
      */
     public function rules(): array
     {
-        if (Request::route()->getName() == 'users.store') {
-            $username = 'unique:users,username';
-            $email = 'unique:users,email';
-            $password = 'required';
-        } elseif (Request::route()->getName() == 'users.update') {
-            $username = Rule::unique('users', 'username')->ignore(
-                $this->route('user')
-            );
-            $email = Rule::unique('users', 'email')->ignore(
-                $this->route('user')
-            );
-            $password = 'nullable';
-        }
 
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', $username],
-            'email' => ['required', 'email', 'max:255', $email],
-            'password' => [$password, 'string', 'min:8', 'confirmed'],
+            'stock' => ['integer'],
+            'brand_id' => ['required', 'integer'],
         ];
 
         return $rules;

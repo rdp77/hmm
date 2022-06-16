@@ -28,4 +28,14 @@ class Brands extends Model
         'email',
         'website'
     ];
+
+    public function spareparts()
+    {
+        return $this->hasMany(Spareparts::class, 'brand_id');
+    }
+
+    public function hardware()
+    {
+        return $this->hasMany(Hardware::class, 'brand_id');
+    }
 }

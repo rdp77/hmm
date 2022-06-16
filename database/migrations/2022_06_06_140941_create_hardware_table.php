@@ -15,6 +15,7 @@ class CreateHardwareTable extends Migration
     {
         Schema::create('hardware', function (Blueprint $table) {
             $table->id();
+            $table->string('code', 10)->unique();
             // Barcode
             $table->string('serial_number')->nullable();
             $table->string('name');
@@ -22,7 +23,7 @@ class CreateHardwareTable extends Migration
             $table->string('model')->nullable();
             $table->foreignId('brand_id')->constrained('brands');
             // $table->string('type')->nullable();
-            $table->enum('status', ['baru', 'rusak'])->default('baru');
+            $table->enum('status', ['baru', 'normal', 'rusak'])->default('baru');
             $table->date('purchase_date')->nullable();
             $table->date('warranty_date')->nullable();
             $table->softDeletes();
