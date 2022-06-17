@@ -10,9 +10,11 @@ function submitForm(code) {
         url: "/search/" + code,
         code: code,
         success: function (result) {
-            iziToast.error({
-                title: "Error",
-                message: result.status,
+            swal({
+                title: "Kode Hardware Ditemukan!",
+                icon: "success",
+            }).then(function () {
+                window.location = result.url;
             });
         },
         statusCode: {

@@ -4,13 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Template\MainController;
 use App\Models\Hardware;
-use App\Models\Template\Log;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Yajra\DataTables\DataTables;
-use Sarfraznawaz2005\ServerMonitor\ServerMonitor;
+use Illuminate\Support\Str;
+use Milon\Barcode\Facades\DNS2DFacade;
 
 class FrontController extends Controller
 {
@@ -38,14 +33,20 @@ class FrontController extends Controller
     public function search($code)
     {
         $check = Hardware::where('code', $code)->first();
+        $url = Str::slug($check->code);
 
-
-        return $check ? response()->json(['status' => 'success', 'data' => $check]) :
+        return $check ? response()->json([
+            'status' => 'success', 'url' => route('result', $url)
+        ]) :
             response()->json(['status' => 'error', 'data' => 'Data Hardware Tidak Ada'], 404);
     }
 
-    public function show()
+    public function result($code)
     {
+        $hardware = Hardware::with('brand', 'brand.spareparts')->where('code', $code)->first();
+        $barcode = DNS2DFacade::getBarcodeHTML($hardware->code ?? url('/'), 'QRCODE');
+
+        return $hardware ? view('result', compact('hardware', 'barcode')) : abort(404);
     }
 
     public function formula()

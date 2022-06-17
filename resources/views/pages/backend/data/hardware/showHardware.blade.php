@@ -18,8 +18,6 @@
 <div class="section-body">
     <div class="card">
         <div class="card-body">
-            <div class="align-content-center">
-            </div>
             <div class="container">
                 <div class="row justify-content-center mb-2">
                     {!! $barcode !!}

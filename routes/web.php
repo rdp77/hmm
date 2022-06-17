@@ -22,6 +22,8 @@ Route::get('/formula', [FrontController::class, 'formula'])
     ->name('formula');
 Route::get('/search/{code}', [FrontController::class, 'search'])
     ->name('search');
+Route::get('/result/{code}', [FrontController::class, 'result'])
+    ->name('result');
 // Route::get('/{slug}', [FrontController::class, 'show']);
 
 // Backend
