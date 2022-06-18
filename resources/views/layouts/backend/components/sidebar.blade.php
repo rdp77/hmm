@@ -14,9 +14,9 @@
                     <i class="fas fa-fire"></i><span>{{ __('pages.dashboard') }}</span>
                 </a>
             </li>
-            <li class="{{ Request::route()->getName() == 'maintenance' ? 'active' : (
+            <li class="{{ Request::route()->getName() == 'maintenance.index' ? 'active' : (
                 Request::route()->getName() == 'dashboard.log' ? 'active' : '') }}">
-                <a href="{{ route('maintenance') }}" class="nav-link">
+                <a href="{{ route('maintenance.index') }}" class="nav-link">
                     <i class="fas fa-toolbox"></i><span>{{ __('Maintenance') }}</span>
                 </a>
             </li>
@@ -101,15 +101,15 @@
                 </a>
             </li>
             <li class="menu-header">{{ __('Laporan') }}</li>
-            <li class="{{ Request::route()->getName() == 'maintenance' ? 'active' : (
+            <li class="{{ Request::route()->getName() == 'maintenance.index' ? 'active' : (
                 Request::route()->getName() == 'dashboard.log' ? 'active' : '') }}">
-                <a href="{{ route('maintenance') }}" class="nav-link">
+                <a href="{{ route('maintenance.index') }}" class="nav-link">
                     <i class="fas fa-file-alt"></i><span>{{ __('MTBF') }}</span>
                 </a>
             </li>
-            <li class="{{ Request::route()->getName() == 'maintenance' ? 'active' : (
+            <li class="{{ Request::route()->getName() == 'maintenance.index' ? 'active' : (
                 Request::route()->getName() == 'dashboard.log' ? 'active' : '') }}">
-                <a href="{{ route('maintenance') }}" class="nav-link">
+                <a href="{{ route('maintenance.index') }}" class="nav-link">
                     <i class="fas fa-file-alt"></i><span>{{ __('MTTR') }}</span>
                 </a>
             </li>

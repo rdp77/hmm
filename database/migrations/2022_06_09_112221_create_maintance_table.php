@@ -13,7 +13,7 @@ class CreateMaintanceTable extends Migration
      */
     public function up()
     {
-        Schema::create('maintance', function (Blueprint $table) {
+        Schema::create('maintenance', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('mtbf');
             $table->bigInteger('mttr');

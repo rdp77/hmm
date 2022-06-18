@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Core\MaintenanceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrontController;
@@ -24,13 +25,11 @@ Route::get('/search/{code}', [FrontController::class, 'search'])
     ->name('search');
 Route::get('/result/{code}', [FrontController::class, 'result'])
     ->name('result');
-// Route::get('/{slug}', [FrontController::class, 'show']);
 
 // Backend
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
-Route::get('/maintenance', [DashboardController::class, 'maintenance'])
-    ->name('maintenance');
+Route::resource('maintenance', MaintenanceController::class);
 // Debug
 Route::get('/debug-sentry', function () {
     throw new Exception('My first Sentry error!');

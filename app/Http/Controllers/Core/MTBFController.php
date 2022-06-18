@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Template\MainController;
+use App\Models\MTBF;
+use App\Models\MTTR;
 use App\Models\Template\Log;
 use Illuminate\Http\Request;
 
@@ -25,6 +27,10 @@ class MTBFController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    public function calculate()
+    {
+    }
 
     public function index()
     {
@@ -84,5 +90,15 @@ class MTBFController extends Controller
     public function deleteAll()
     {
         //
+    }
+
+    public function createMTBF($total_work, $time_damaged, $start_damaged)
+    {
+        return  [
+            'total_work' => $total_work,
+            'damaged' => $time_damaged,
+            'total_damaged' => count($time_damaged),
+            'time_damaged' => $start_damaged,
+        ];
     }
 }

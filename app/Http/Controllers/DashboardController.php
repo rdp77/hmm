@@ -19,8 +19,10 @@ class DashboardController extends Controller
      *
      * @return void
      */
-    public function __construct(MainController $MainController, ServerMonitor $serverMonitor)
-    {
+    public function __construct(
+        MainController $MainController,
+        ServerMonitor $serverMonitor
+    ) {
         $this->middleware('auth');
         $this->MainController = $MainController;
         $this->serverMonitor = $serverMonitor;
@@ -86,10 +88,5 @@ class DashboardController extends Controller
             'checkResults',
             'lastRun'
         ));
-    }
-
-    public function maintenance()
-    {
-        return view('pages.backend.maintenance');
     }
 }

@@ -17,7 +17,7 @@ class CreateMtbfTable extends Migration
             $table->id();
             $table->double('working');
             $table->json('breakdown');
-            $table->text('desc')->nullable();
+            $table->text('total');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -198,4 +198,29 @@ class MainController extends Controller
     {
         return $day * 24;
     }
+
+    public function hoursToDay($hours)
+    {
+        return $hours / 24;
+    }
+
+    public function minutesToHours($minutes)
+    {
+        return $minutes / 60;
+    }
+
+    public function hoursToMinutes($hours)
+    {
+        return $hours * 60;
+    }
+
+    public function minutesToDay($minutes)
+    {
+        return $minutes / (60 * 24);
+    }
+
+    public function dayToMinutes($day)
+    {
+        return $day * 60 * 24;
+    }
 }

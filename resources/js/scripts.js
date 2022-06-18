@@ -752,6 +752,8 @@ $(function () {
                 up: "fas fa-chevron-up",
                 down: "fas fa-chevron-down",
             },
+            showSeconds: false,
+            showMeridian: false,
         });
     }
 

@@ -32,6 +32,12 @@ function save() {
                     window.location.reload();
                 });
             },
+            400: function (response) {
+                iziToast.error({
+                    title: "Error",
+                    message: response.responseJSON.error,
+                });
+            },
         },
     });
 }

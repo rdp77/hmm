@@ -3,18 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Maintance extends Model
+class MaintenanceDetail extends Model
 {
-    use SoftDeletes;
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'maintenance';
+    protected $table = 'mt_dt';
 
     /**
      * The attributes that are mass assignable.
@@ -22,12 +20,11 @@ class Maintance extends Model
      * @var array
      */
     protected $fillable = [
-        'mtbf',
-        'mttr',
-        'hardware_id',
-        'mt_id',
-        'created_by',
-        'updated_by',
-        'deleted_by',
+        'code'
     ];
+
+    public function maintenance()
+    {
+        return $this->hasOne(Maintenance::class, 'mt_id');
+    }
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MTTR extends Model
+class Maintenance extends Model
 {
     use SoftDeletes;
 
@@ -14,7 +14,7 @@ class MTTR extends Model
      *
      * @var string
      */
-    protected $table = 'mttr';
+    protected $table = 'maintenance';
 
     /**
      * The attributes that are mass assignable.
@@ -22,11 +22,17 @@ class MTTR extends Model
      * @var array
      */
     protected $fillable = [
-        'maintance_time',
-        'repairs',
-        'total',
+        'mtbf',
+        'mttr',
+        'hardware_id',
+        'mt_id',
         'created_by',
         'updated_by',
         'deleted_by',
     ];
+
+    public function code()
+    {
+        return $this->belongsTo(MaintenanceDetail::class, 'mt_id');
+    }
 }

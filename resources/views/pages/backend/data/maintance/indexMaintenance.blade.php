@@ -1,15 +1,15 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | ').__('Maintance'))
+@section('title', __('pages.title').__(' | ').__('Maintenance'))
 @section('backToContent')
 @include('pages.backend.components.backToContent',['url'=>route('dashboard')])
 @endsection
 @section('ButtonHeader')
-<a href="#" class="btn btn-primary">Tambah</a>
+<a href="{{ route('maintenance.create') }}" class="btn btn-primary">Tambah</a>
 @endsection
-@section('titleContent', __('Maintance'))
+@section('titleContent', __('Maintenance'))
 @section('breadcrumb', __('pages.dashboard'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Maintance') }}</div>
+<div class="breadcrumb-item active">{{ __('Maintenance') }}</div>
 @endsection
 
 @section('content')

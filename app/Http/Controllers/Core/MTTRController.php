@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Template\MainController;
+use App\Models\MTTR;
 use App\Models\Template\Log;
 use Illuminate\Http\Request;
 
@@ -25,6 +26,10 @@ class MTTRController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    public function calculate()
+    {
+    }
 
     public function index()
     {
@@ -84,5 +89,24 @@ class MTTRController extends Controller
     public function deleteAll()
     {
         //
+    }
+
+    public function createMTTR($total_maintenance, $start_maintenance)
+    {
+        return  [
+            'total_maintenance' => $total_maintenance,
+            'total' => count($total_maintenance),
+            'time_maintenance' => $start_maintenance,
+        ];
+    }
+
+    public function checkDuplicate()
+    {
+        $check = MTTR::whereDate('created_at', '=', date('Y-m-d'))->first();
+        if ($check) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

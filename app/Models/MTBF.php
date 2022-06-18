@@ -24,7 +24,7 @@ class MTBF extends Model
     protected $fillable = [
         'working',
         'breakdown',
-        'desc',
+        'total',
         'created_by',
         'updated_by',
         'deleted_by',

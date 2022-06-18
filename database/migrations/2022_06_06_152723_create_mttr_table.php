@@ -17,7 +17,7 @@ class CreateMttrTable extends Migration
             $table->id();
             $table->json('maintance_time');
             $table->integer('repairs');
-            $table->text('desc')->nullable();
+            $table->text('total');
             $table->softDeletes();
             $table->timestamps();
         });
