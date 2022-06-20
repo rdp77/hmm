@@ -12,6 +12,7 @@ use App\Models\MTTR;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Response;
+use Yajra\DataTables\DataTables;
 
 class MaintenanceController extends Controller
 {
@@ -39,10 +40,44 @@ class MaintenanceController extends Controller
 
     public function calculatedAvailibility($mtbf, $mttr)
     {
+
+        $availibility = $mtbf / ($mtbf + $mttr) * 100;
+        return number_format($availibility, 2, '.', '');
     }
 
-    public function index()
+    public function index(Request $req)
     {
+        if ($req->ajax()) {
+            $data = Maintenance::with('detail', 'mtbf', 'mttr')->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('code', function ($row) {
+                    return $row->detail->code;
+                })
+                ->addColumn('hardware_code', function ($row) {
+                    return $row->hardware->code;
+                })
+                ->addColumn('brand', function ($row) {
+                    return $row->hardware->brand->name;
+                })
+                ->addColumn('mtbf', function ($row) {
+                    return $row->mtbf->total . " Jam";
+                })
+                ->addColumn('mttr', function ($row) {
+                    return $row->mttr->total . " Jam";
+                })
+                ->addColumn('date', function ($row) {
+                    return Carbon::parse($row->created_at)->isoFormat('dddd, D-MMM-Y');
+                })
+                ->addColumn('availibility', function ($row) {
+                    $mtbf = $row->mtbf->total;
+                    $mttr = $row->mttr->total;
+                    $availibility = $this->calculatedAvailibility($mtbf, $mttr);
+                    return $availibility . "%";
+                })
+                ->make(true);
+        }
+
         return view('pages.backend.data.maintance.indexMaintenance');
     }
 

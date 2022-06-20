@@ -1,5 +1,81 @@
 "use strict";
 
+var table = $("#table").DataTable({
+    pageLength: 10,
+    processing: true,
+    serverSide: true,
+    responsive: true,
+    lengthMenu: [
+        [10, 25, 50, -1],
+        [10, 25, 50, "Semua"],
+    ],
+    ajax: {
+        url: index,
+        type: "GET",
+    },
+    dom: '<"html5buttons">lBrtip',
+    oLanguage: {
+        sEmptyTable: "Belum ada data",
+    },
+    columns: [
+        {
+            width: "5%",
+            data: "DT_RowIndex",
+            orderable: false,
+            searchable: false,
+        },
+        { data: "code" },
+        { data: "hardware_code" },
+        { data: "brand" },
+        { data: "mtbf" },
+        { data: "mttr" },
+        { data: "date" },
+        { data: "availibility" },
+    ],
+    buttons: [
+        {
+            extend: "print",
+            text: "Print Semua",
+            exportOptions: {
+                modifier: {
+                    selected: null,
+                },
+                columns: ":visible",
+            },
+            messageTop: "Dokumen dikeluarkan tanggal " + moment().format("L"),
+            // footer: true,
+            header: true,
+        },
+        {
+            extend: "csv",
+        },
+        {
+            extend: "print",
+            text: "Print Yang Dipilih",
+            exportOptions: {
+                columns: ":visible",
+            },
+        },
+        {
+            extend: "excelHtml5",
+            exportOptions: {
+                columns: ":visible",
+            },
+        },
+        {
+            extend: "pdfHtml5",
+            exportOptions: {
+                columns: [0, 1, 2, 5],
+            },
+        },
+        {
+            extend: "colvis",
+            postfixButtons: ["colvisRestore"],
+            text: "Sembunyikan Kolom",
+        },
+    ],
+});
+
 var statistics_chart = document.getElementById("myChart").getContext("2d");
 
 var myChart = new Chart(statistics_chart, {

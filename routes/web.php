@@ -30,10 +30,7 @@ Route::get('/result/{code}', [FrontController::class, 'result'])
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 Route::resource('maintenance', MaintenanceController::class);
-// Debug
-Route::get('/debug-sentry', function () {
-    throw new Exception('My first Sentry error!');
-});
+
 // Server Monitor
 Route::get('/server-monitor', [DashboardController::class, 'serverMonitor'])
     ->name('dashboard.server-monitor');

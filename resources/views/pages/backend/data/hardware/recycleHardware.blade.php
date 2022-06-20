@@ -33,7 +33,7 @@
                         {{ __('NO') }}
                     </th>
                     <th>{{ __('Serial Number') }}</th>
-                    <th>{{ __('Barcode') }}</th>
+                    <th>{{ __('Kode') }}</th>
                     <th>{{ __('Nama') }}</th>
                     <th>{{ __('Model') }}</th>
                     <th>{{ __('Status') }}</th>
