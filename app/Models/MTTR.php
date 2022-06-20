@@ -22,11 +22,20 @@ class MTTR extends Model
      * @var array
      */
     protected $fillable = [
-        'maintance_time',
+        'maintenance_time',
         'repairs',
         'total',
         'created_by',
         'updated_by',
         'deleted_by',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'maintenance_time' => 'array'
     ];
 }

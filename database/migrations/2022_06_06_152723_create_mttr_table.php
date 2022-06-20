@@ -15,9 +15,9 @@ class CreateMttrTable extends Migration
     {
         Schema::create('mttr', function (Blueprint $table) {
             $table->id();
-            $table->json('maintance_time');
+            $table->json('maintenance_time');
             $table->integer('repairs');
-            $table->text('total');
+            $table->double('total');
             $table->softDeletes();
             $table->timestamps();
         });

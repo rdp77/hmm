@@ -16,8 +16,8 @@ class CreateMtbfTable extends Migration
         Schema::create('mtbf', function (Blueprint $table) {
             $table->id();
             $table->double('working');
-            $table->json('breakdown');
-            $table->text('total');
+            $table->text('breakdown');
+            $table->double('total');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -37,7 +37,7 @@
                                 {{ __('Total Waktu Kerja (Tanpa Kerusakan)')}}<code>*</code>
                             </label>
                             <div class="input-group mb-2">
-                                <input type="text" class="form-control text-right" name="total_work" autofocus>
+                                <input type="text" class="form-control text-right" name="total_work" autofocus required>
                                 <div class="input-group-append">
                                     <div class="input-group-text">Jam</div>
                                 </div>
@@ -50,7 +50,8 @@
                                         {{ __('Waktu Kerusakan')}}<code>*</code>
                                     </label>
                                     <div class="input-group mb-2">
-                                        <input type="text" class="form-control text-right" name="time_damaged[]">
+                                        <input type="text" class="form-control text-right" name="time_damaged[]"
+                                            required>
                                         <div class="input-group-append">
                                             <div class="input-group-text">Jam</div>
                                         </div>
@@ -96,7 +97,8 @@
                                         {{ __('Total Maintenance')}}<code>*</code>
                                     </label>
                                     <div class="input-group mb-2">
-                                        <input type="text" class="form-control text-right" name="total_maintenance[]">
+                                        <input type="text" class="form-control text-right" name="total_maintenance[]"
+                                            required>
                                         <div class="input-group-append">
                                             <div class="input-group-text">Jam</div>
                                         </div>

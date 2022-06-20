@@ -9,6 +9,7 @@ use App\Models\MTBF;
 use App\Models\MTTR;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Response;
 
 class MaintenanceController extends Controller
 {
@@ -59,10 +60,17 @@ class MaintenanceController extends Controller
         }
         // Create Datas
         $mtbf = $this->mtbf->createMTBF($request->total_work, $request->time_damaged, $request->start_damaged);
-        $mttr = $this->mttr->createMTTR($request->total_maintenance, $request->start_maintenance);
+        $mttr = $this->mttr->createMTTR($request->total_maintenance, $request->time_maintenance);
+        // Stored Data
+        $mtbf = $this->mtbf->store($mtbf["total_work"], $mtbf["time_damaged"], $mtbf["mtbf"]);
+        $mttr = $this->mttr->store($mttr["maintenance"], $mttr["mttr"]);
 
-
-        dd($mtbf);
+        if ($mtbf and $mttr) {
+            return Response::json([
+                'status' => 'success',
+                'data' => 'Data berhasil disimpan!'
+            ]);
+        }
     }
 
     public function show($id)

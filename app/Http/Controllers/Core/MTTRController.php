@@ -27,8 +27,14 @@ class MTTRController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-    public function calculate()
+    public function calculated($total_maintenance)
     {
+        $maintance = 0;
+        $totalMaintenance = count($total_maintenance);
+        foreach ($total_maintenance as $key) {
+            $maintance += $key;
+        }
+        return $maintance / $totalMaintenance;
     }
 
     public function index()
@@ -41,9 +47,15 @@ class MTTRController extends Controller
         //
     }
 
-    public function store(Request $request)
+    public function store($maintenance, $total)
     {
-        //
+        MTTR::create([
+            'maintenance_time' => $maintenance,
+            'repairs' => count($maintenance),
+            'total' => $total
+        ]);
+
+        return true;
     }
 
     public function show($id)
@@ -91,22 +103,12 @@ class MTTRController extends Controller
         //
     }
 
-    public function createMTTR($total_maintenance, $start_maintenance)
+    public function createMTTR($total_maintenance, $time_maintenance)
     {
         return  [
-            'total_maintenance' => $total_maintenance,
-            'total' => count($total_maintenance),
-            'time_maintenance' => $start_maintenance,
+            'maintenance' => $total_maintenance,
+            'mttr' => $this->calculated($total_maintenance),
+            'time_maintenance' => $time_maintenance,
         ];
-    }
-
-    public function checkDuplicate()
-    {
-        $check = MTTR::whereDate('created_at', '=', date('Y-m-d'))->first();
-        if ($check) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

@@ -28,8 +28,10 @@ class MTBFController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-    public function calculate()
+    public function calculated($total_work, $breakdown_time, $total_breakdown_time)
     {
+        // Hours
+        return ($total_work - $breakdown_time) / $total_breakdown_time;
     }
 
     public function index()
@@ -42,9 +44,15 @@ class MTBFController extends Controller
         //
     }
 
-    public function store(Request $request)
+    public function store($workingTime, $breakdown, $total)
     {
-        //
+        MTBF::create([
+            'working' => $workingTime,
+            'breakdown' => $breakdown,
+            'total' => $total,
+        ]);
+
+        return true;
     }
 
     public function show($id)
@@ -94,11 +102,18 @@ class MTBFController extends Controller
 
     public function createMTBF($total_work, $time_damaged, $start_damaged)
     {
-        return  [
+        $valueDamaged = 0;
+        $totalDamaged = count($time_damaged);
+        foreach ($time_damaged as $key) {
+            $valueDamaged += $key;
+        }
+        return [
             'total_work' => $total_work,
             'damaged' => $time_damaged,
-            'total_damaged' => count($time_damaged),
+            'total_damaged' => $totalDamaged,
+            'total_value_damaged' => $valueDamaged,
             'time_damaged' => $start_damaged,
+            'mtbf' => $this->calculated($total_work, $valueDamaged, $totalDamaged)
         ];
     }
 }

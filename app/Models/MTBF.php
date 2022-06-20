@@ -29,4 +29,13 @@ class MTBF extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'breakdown' => 'array'
+    ];
 }
