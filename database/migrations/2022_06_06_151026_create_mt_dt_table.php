@@ -15,7 +15,7 @@ class CreateMtDtTable extends Migration
     {
         Schema::create('mt_dt', function (Blueprint $table) {
             $table->id();
-            $table->integer('code');
+            $table->string('code');
         });
     }
 

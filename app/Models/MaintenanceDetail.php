@@ -15,6 +15,13 @@ class MaintenanceDetail extends Model
     protected $table = 'mt_dt';
 
     /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

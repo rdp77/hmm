@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Template\MainController;
+use App\Models\Hardware;
+use App\Models\Maintenance;
 use App\Models\MaintenanceDetail;
 use App\Models\MTBF;
 use App\Models\MTTR;
@@ -43,8 +45,10 @@ class MaintenanceController extends Controller
     public function create()
     {
         $code = $this->getRandomCode();
+        $hardware = Hardware::with('brand')->get();
         return view('pages.backend.data.maintance.createMaintenance', [
-            'code' => $code
+            'code' => $code,
+            'hardware' => $hardware,
         ]);
     }
 
@@ -59,18 +63,36 @@ class MaintenanceController extends Controller
             return response()->json(['error' => 'Data MTTR sudah ada untuk tanggal ini!'], 400);
         }
         // Create Datas
-        $mtbf = $this->mtbf->createMTBF($request->total_work, $request->time_damaged, $request->start_damaged);
-        $mttr = $this->mttr->createMTTR($request->total_maintenance, $request->time_maintenance);
+        $mtbf = $this->mtbf->create($request->total_work, $request->breakdown, $request->time_breakdown);
+        $mttr = $this->mttr->create($request->maintenance_time, $request->start_time);
         // Stored Data
-        $mtbf = $this->mtbf->store($mtbf["total_work"], $mtbf["time_damaged"], $mtbf["mtbf"]);
-        $mttr = $this->mttr->store($mttr["maintenance"], $mttr["mttr"]);
+        $mtbf = MTBF::create([
+            'working' => $mtbf["total_work"],
+            'breakdown' => $mtbf["breakdown"],
+            'total' => $mtbf["mtbf"],
+            'time' => $mtbf["time_breakdown"],
+        ]);
+        $mttr = MTTR::create([
+            'maintenance_time' => $mttr["maintenance_time"],
+            'time' => $mttr["start_time_maintenance"],
+            'repairs' => count($mttr["maintenance_time"]),
+            'total' => $mttr["mttr"]
+        ]);
 
-        if ($mtbf and $mttr) {
-            return Response::json([
-                'status' => 'success',
-                'data' => 'Data berhasil disimpan!'
-            ]);
-        }
+        $mt_dt = MaintenanceDetail::create([
+            'code' => $request->code
+        ]);
+        Maintenance::create([
+            'mtbf' => $mtbf->id,
+            'mttr' => $mttr->id,
+            'hardware_id' => $request->hardware,
+            'mt_id' => $mt_dt->id,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => 'Data berhasil disimpan!'
+        ]);
     }
 
     public function show($id)

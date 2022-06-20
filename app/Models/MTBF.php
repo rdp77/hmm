@@ -24,6 +24,7 @@ class MTBF extends Model
     protected $fillable = [
         'working',
         'breakdown',
+        'time',
         'total',
         'created_by',
         'updated_by',
@@ -36,6 +37,12 @@ class MTBF extends Model
      * @var array
      */
     protected $casts = [
-        'breakdown' => 'array'
+        'breakdown' => 'array',
+        'time' => 'array'
     ];
+
+    public function maintenance()
+    {
+        return $this->belongsTo(MTBF::class, 'mtbf');
+    }
 }

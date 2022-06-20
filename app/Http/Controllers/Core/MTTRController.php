@@ -27,14 +27,14 @@ class MTTRController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-    public function calculated($total_maintenance)
+    public function calculated($maintenanceTime)
     {
-        $maintance = 0;
-        $totalMaintenance = count($total_maintenance);
-        foreach ($total_maintenance as $key) {
-            $maintance += $key;
+        $maintenanceTotal = 0;
+        $repairs = count($maintenanceTime);
+        foreach ($maintenanceTime as $key) {
+            $maintenanceTotal += $key;
         }
-        return $maintance / $totalMaintenance;
+        return $maintenanceTotal / $repairs;
     }
 
     public function index()
@@ -42,20 +42,18 @@ class MTTRController extends Controller
         //
     }
 
-    public function create()
+    public function create($maintenanceTime, $startTime)
     {
-        //
+        return  [
+            'maintenance_time' => $maintenanceTime,
+            'mttr' => $this->calculated($maintenanceTime),
+            'start_time_maintenance' => $startTime,
+        ];
     }
 
     public function store($maintenance, $total)
     {
-        MTTR::create([
-            'maintenance_time' => $maintenance,
-            'repairs' => count($maintenance),
-            'total' => $total
-        ]);
-
-        return true;
+        //
     }
 
     public function show($id)
@@ -101,14 +99,5 @@ class MTTRController extends Controller
     public function deleteAll()
     {
         //
-    }
-
-    public function createMTTR($total_maintenance, $time_maintenance)
-    {
-        return  [
-            'maintenance' => $total_maintenance,
-            'mttr' => $this->calculated($total_maintenance),
-            'time_maintenance' => $time_maintenance,
-        ];
     }
 }

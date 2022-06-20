@@ -24,6 +24,7 @@ class MTTR extends Model
     protected $fillable = [
         'maintenance_time',
         'repairs',
+        'time',
         'total',
         'created_by',
         'updated_by',
@@ -36,6 +37,7 @@ class MTTR extends Model
      * @var array
      */
     protected $casts = [
-        'maintenance_time' => 'array'
+        'maintenance_time' => 'array',
+        'time' => 'array',
     ];
 }

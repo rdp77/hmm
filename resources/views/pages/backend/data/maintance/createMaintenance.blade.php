@@ -23,6 +23,20 @@
     </div>
 </div>
 <form id="stored">
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group">
+                <div class="d-block">
+                    <label class="control-label">{{ __('Hardware') }}<code>*</code></label>
+                </div>
+                <select class="form-control select2" name="hardware">
+                    @foreach ($hardware as $h)
+                    <option value="{{ $h->id }}">{{ $h->name.__(' | ').$h->brand->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col">
             <div class="section-body">
@@ -50,8 +64,7 @@
                                         {{ __('Waktu Kerusakan')}}<code>*</code>
                                     </label>
                                     <div class="input-group mb-2">
-                                        <input type="text" class="form-control text-right" name="time_damaged[]"
-                                            required>
+                                        <input type="text" class="form-control text-right" name="breakdown[]" required>
                                         <div class="input-group-append">
                                             <div class="input-group-text">Jam</div>
                                         </div>
@@ -67,7 +80,7 @@
                                                 <i class="fas fa-clock"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control timepicker" name="start_damaged[]">
+                                        <input type="text" class="form-control timepicker" name="time_breakdown[]">
                                     </div>
                                 </div>
                             </div>
@@ -97,7 +110,7 @@
                                         {{ __('Total Maintenance')}}<code>*</code>
                                     </label>
                                     <div class="input-group mb-2">
-                                        <input type="text" class="form-control text-right" name="total_maintenance[]"
+                                        <input type="text" class="form-control text-right" name="maintenance_time[]"
                                             required>
                                         <div class="input-group-append">
                                             <div class="input-group-text">Jam</div>
@@ -114,7 +127,7 @@
                                                 <i class="fas fa-clock"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control timepicker" name="time_maintenance[]">
+                                        <input type="text" class="form-control timepicker" name="start_time[]">
                                     </div>
                                 </div>
                             </div>
@@ -129,7 +142,9 @@
                 </div>
             </div>
         </div>
+        <div id="addAdditional"></div>
     </div>
+    <button class="btn btn-primary mr-1" type="button">{{ __('Tambah Ketergantungan Hardware') }}</button>
     <button class="btn btn-primary mr-1" type="button" onclick="save()">{{ __('Tambah') }}</button>
 </form>
 @endsection

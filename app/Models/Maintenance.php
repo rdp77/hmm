@@ -35,4 +35,9 @@ class Maintenance extends Model
     {
         return $this->belongsTo(MaintenanceDetail::class, 'mt_id');
     }
+
+    public function mtbf()
+    {
+        return $this->belongsTo(MTBF::class, 'mtbf');
+    }
 }
