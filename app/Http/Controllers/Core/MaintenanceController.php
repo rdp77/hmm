@@ -11,6 +11,7 @@ use App\Models\MTBF;
 use App\Models\MTTR;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\DataTables;
 
@@ -70,10 +71,7 @@ class MaintenanceController extends Controller
                     return Carbon::parse($row->created_at)->isoFormat('dddd, D-MMM-Y');
                 })
                 ->addColumn('availibility', function ($row) {
-                    $mtbf = $row->mtbf->total;
-                    $mttr = $row->mttr->total;
-                    $availibility = $this->calculatedAvailibility($mtbf, $mttr);
-                    return $availibility . "%";
+                    return $row->availibility . "%";
                 })
                 ->make(true);
         }
@@ -126,6 +124,7 @@ class MaintenanceController extends Controller
             'mttr_id' => $mttr->id,
             'hardware_id' => $request->hardware,
             'mt_id' => $mt_dt->id,
+            'availability' => $this->calculatedAvailibility($mtbf->total, $mttr->total),
         ]);
 
         return response()->json([
@@ -136,7 +135,7 @@ class MaintenanceController extends Controller
 
     public function show($id)
     {
-        //
+        // Get Availibility Statistics Per Month
     }
 
     public function edit($id)
@@ -192,6 +191,49 @@ class MaintenanceController extends Controller
             } else {
                 return $code;
             }
+        }
+    }
+
+    public function getStatistics()
+    {
+        $now = Carbon::now();
+        $year = $now->year;
+        $month = $now->month;
+        $uptime = $mtbf = $mttr = [];
+        $maintenance = $this->getData($month, $year);
+
+
+
+        return dd($maintenance);
+        // return [
+        //     'uptime' => $uptime,
+        //     'mtbf' => $mtbf,
+        //     'mttr' => $mttr,
+        // ];
+    }
+
+    function getData($month, $year)
+    {
+        $maintenance = Maintenance::with('detail', 'mtbf', 'mttr')
+            ->where(DB::raw('YEAR(created_at)'), '=', $year)
+            ->where(DB::raw('MONTH(created_at)'), '=', $month)
+            ->get();
+
+        return $maintenance;
+    }
+
+    function getDataPerMonth()
+    {
+        $now = Carbon::now();
+        $year = $now->year;
+        $month = $now->month;
+        $uptime = $mtbf = $mttr = [];
+        $maintenance = $this->getData($month, $year);
+
+        foreach ($maintenance as $key => $value) {
+            $uptime[] = $value->detail->code;
+            $mtbf[] = $value->mtbf->total;
+            $mttr[] = $value->mttr->total;
         }
     }
 }

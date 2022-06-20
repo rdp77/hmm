@@ -15,7 +15,8 @@
                 </a>
             </li>
             <li class="{{ Request::route()->getName() == 'maintenance.index' ? 'active' : (
-                Request::route()->getName() == 'dashboard.log' ? 'active' : '') }}">
+                Request::route()->getName() == 'dashboard.log' ? 'active' : (
+                    Request::route()->getName() == 'maintenance.create' ? 'active' : '')) }}">
                 <a href="{{ route('maintenance.index') }}" class="nav-link">
                     <i class="fas fa-toolbox"></i><span>{{ __('Maintenance') }}</span>
                 </a>

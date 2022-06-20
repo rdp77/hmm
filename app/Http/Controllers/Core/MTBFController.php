@@ -111,7 +111,7 @@ class MTBFController extends Controller
 
     public function show($id)
     {
-        //
+        // Get MTBF Statistics Per Month        
     }
 
     public function edit($id)

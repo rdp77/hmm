@@ -24,6 +24,10 @@
 </div>
 <form id="stored">
     <div class="card">
+        <div class="card-header">
+            <h4>Data Utama</h4>
+        </div>
+        <input type="hidden" name="code" value="{{ $code }}">
         <div class="card-body">
             <div class="form-group">
                 <div class="d-block">
@@ -35,117 +39,101 @@
                     @endforeach
                 </select>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="section-body">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>MTBF</h4>
+            <div class="row">
+                <div class="col">
+                    <h2 class="section-title">MTBF</h2>
+                    <div class="form-group">
+                        <label class="control-label">
+                            {{ __('Total Waktu Kerja (Tanpa Kerusakan)')}}<code>*</code>
+                        </label>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control text-right" name="total_work" autofocus required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">Jam</div>
+                            </div>
+                        </div>
                     </div>
-                    <input type="hidden" name="code" value="{{ $code }}">
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="control-label">
-                                {{ __('Total Waktu Kerja (Tanpa Kerusakan)')}}<code>*</code>
-                            </label>
-                            <div class="input-group mb-2">
-                                <input type="text" class="form-control text-right" name="total_work" autofocus required>
-                                <div class="input-group-append">
-                                    <div class="input-group-text">Jam</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label class="control-label">
-                                        {{ __('Waktu Kerusakan')}}<code>*</code>
-                                    </label>
-                                    <div class="input-group mb-2">
-                                        <input type="text" class="form-control text-right" name="breakdown[]" required>
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">Jam</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label>Waktu Mulai Kerusakan</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">
-                                                <i class="fas fa-clock"></i>
-                                            </div>
-                                        </div>
-                                        <input type="text" class="form-control timepicker" name="time_breakdown[]">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    {{ __('Waktu Kerusakan')}}<code>*</code>
+                                </label>
+                                <div class="input-group mb-2">
+                                    <input type="text" class="form-control text-right" name="breakdown[]" required>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">Jam</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="mtbf"></div>
-                        <div class="card-footer text-right">
-                            <button class="btn btn-primary mr-1" type="button" id="addMTBF">
-                                {{ __('Tambah Waktu Rusak') }}
-                            </button>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Waktu Mulai Kerusakan</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control timepicker" name="time_breakdown[]">
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <div id="mtbf"></div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-primary mr-1" type="button" id="addMTBF">
+                            {{ __('Tambah Waktu Rusak') }}
+                        </button>
+                    </div>
+                </div>
+                <div class="col">
+                    <h2 class="section-title">MTTR</h2>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    {{ __('Total Maintenance')}}<code>*</code>
+                                </label>
+                                <div class="input-group mb-2">
+                                    <input type="text" class="form-control text-right" name="maintenance_time[]"
+                                        required>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">Jam</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Waktu Maintenance</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control timepicker" name="start_time[]">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mttr"></div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-primary mr-1" type="button" id="addMTTR">
+                            {{ __('Tambah Maintenance') }}
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col">
-            <div class="section-body">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>MTTR</h4>
-                    </div>
-                    <input type="hidden" name="code" value="{{ $code }}">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label class="control-label">
-                                        {{ __('Total Maintenance')}}<code>*</code>
-                                    </label>
-                                    <div class="input-group mb-2">
-                                        <input type="text" class="form-control text-right" name="maintenance_time[]"
-                                            required>
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">Jam</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label>Waktu Maintenance</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">
-                                                <i class="fas fa-clock"></i>
-                                            </div>
-                                        </div>
-                                        <input type="text" class="form-control timepicker" name="start_time[]">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="mttr"></div>
-                        <div class="card-footer text-right">
-                            <button class="btn btn-primary mr-1" type="button" id="addMTTR">
-                                {{ __('Tambah Maintenance') }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="addAdditional"></div>
     </div>
-    <button class="btn btn-primary mr-1" type="button">{{ __('Tambah Ketergantungan Hardware') }}</button>
-    <button class="btn btn-primary mr-1" type="button" onclick="save()">{{ __('Tambah') }}</button>
+    <div id="addAdditional"></div>
+    <div class="text-center">
+        <button class="btn btn-light mr-1" type="button">{{ __('Tambah Ketergantungan Hardware') }}</button>
+        <button class="btn btn-primary mr-1" type="button" onclick="save()">{{ __('Tambah Data Maintenance') }}</button>
+    </div>
 </form>
 @endsection
 @section('script')

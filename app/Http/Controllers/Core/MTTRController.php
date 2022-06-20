@@ -105,7 +105,7 @@ class MTTRController extends Controller
 
     public function show($id)
     {
-        //
+        // Get MTTR Statistics Per Month
     }
 
     public function edit($id)

@@ -26,6 +26,7 @@ class Maintenance extends Model
         'mttr_id',
         'hardware_id',
         'mt_id',
+        'availability',
         'created_by',
         'updated_by',
         'deleted_by',

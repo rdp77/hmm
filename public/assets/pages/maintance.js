@@ -76,24 +76,29 @@ var table = $("#table").DataTable({
     ],
 });
 
-var statistics_chart = document.getElementById("myChart").getContext("2d");
+var statistics_chart = document.getElementById("uptime").getContext("2d");
 
-var myChart = new Chart(statistics_chart, {
+var uptime = new Chart(statistics_chart, {
     type: "line",
     data: {
         labels: [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
+            "Januari",
+            "Februari",
+            "Maret",
+            "April",
+            "Mei",
+            "Juni",
+            "Juli",
+            "Agustus",
+            "September",
+            "Oktober",
+            "November",
+            "Desember",
         ],
         datasets: [
             {
-                label: "Statistics",
-                data: [640, 387, 530, 302, 430, 270, 488],
+                label: "Uptime",
+                data: [55, 20, 30, 31, 100, 99, 92, 85, 92, 50, 40, 90],
                 borderWidth: 5,
                 borderColor: "#6777ef",
                 backgroundColor: "transparent",
@@ -115,7 +120,10 @@ var myChart = new Chart(statistics_chart, {
                         drawBorder: false,
                     },
                     ticks: {
-                        stepSize: 150,
+                        stepSize: 25,
+                        callback: function (value, index, values) {
+                            return value + "%";
+                        },
                     },
                 },
             ],
@@ -131,23 +139,30 @@ var myChart = new Chart(statistics_chart, {
     },
 });
 
-var ctx = document.getElementById("myCharts").getContext("2d");
-var myCharts = new Chart(ctx, {
+var ctx = document.getElementById("maintenance").getContext("2d");
+var maintenance = new Chart(ctx, {
     type: "line",
     data: {
         labels: [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
+            "Januari",
+            "Februari",
+            "Maret",
+            "April",
+            "Mei",
+            "Juni",
+            "Juli",
+            "Agustus",
+            "September",
+            "Oktober",
+            "November",
+            "Desember",
         ],
         datasets: [
             {
-                label: "Statistics",
-                data: [460, 458, 330, 502, 430, 610, 488],
+                label: "MTBF",
+                data: [
+                    460, 458, 330, 502, 430, 610, 488, 568, 568, 568, 568, 568,
+                ],
                 borderWidth: 2,
                 backgroundColor: "rgba(63,82,227,.8)",
                 borderWidth: 0,
@@ -158,8 +173,11 @@ var myCharts = new Chart(ctx, {
                 pointHoverBackgroundColor: "rgba(63,82,227,.8)",
             },
             {
-                label: "Statistics",
-                data: [390, 600, 390, 280, 600, 430, 638],
+                label: "MTTR",
+                data: [
+                    390, 600, 390, 280, 600, 430, 638, 488, 568, 568, 568, 568,
+                    568,
+                ],
                 borderWidth: 2,
                 backgroundColor: "rgba(254,86,83,.7)",
                 borderWidth: 0,
@@ -173,7 +191,7 @@ var myCharts = new Chart(ctx, {
     },
     options: {
         legend: {
-            display: false,
+            display: true,
         },
         scales: {
             yAxes: [
@@ -184,9 +202,9 @@ var myCharts = new Chart(ctx, {
                     },
                     ticks: {
                         beginAtZero: true,
-                        stepSize: 200,
+                        stepSize: 120,
                         callback: function (value, index, values) {
-                            return "$" + value;
+                            return value + " Jam";
                         },
                     },
                 },
@@ -200,165 +218,5 @@ var myCharts = new Chart(ctx, {
                 },
             ],
         },
-    },
-});
-
-var ctx = document.getElementById("myChart2").getContext("2d");
-var myChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-        labels: [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-        ],
-        datasets: [
-            {
-                label: "Statistics",
-                data: [460, 458, 330, 502, 430, 610, 488],
-                borderWidth: 2,
-                backgroundColor: "rgba(254,86,83,.7)",
-                borderColor: "rgba(254,86,83,.7)",
-                borderWidth: 2.5,
-                pointBackgroundColor: "#ffffff",
-                pointRadius: 4,
-            },
-            {
-                label: "Statistics",
-                data: [550, 558, 390, 562, 490, 670, 538],
-                borderWidth: 2,
-                backgroundColor: "rgba(63,82,227,.8)",
-                borderColor: "transparent",
-                borderWidth: 0,
-                pointBackgroundColor: "#999",
-                pointRadius: 4,
-            },
-        ],
-    },
-    options: {
-        legend: {
-            display: false,
-        },
-        scales: {
-            yAxes: [
-                {
-                    gridLines: {
-                        drawBorder: false,
-                        color: "#f2f2f2",
-                    },
-                    ticks: {
-                        beginAtZero: true,
-                        stepSize: 150,
-                    },
-                },
-            ],
-            xAxes: [
-                {
-                    gridLines: {
-                        display: false,
-                    },
-                },
-            ],
-        },
-    },
-});
-
-var ctx = document.getElementById("myChart3").getContext("2d");
-var myChart = new Chart(ctx, {
-    type: "line",
-    data: {
-        labels: [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-        ],
-        datasets: [
-            {
-                label: "Google",
-                data: [290, 358, 220, 402, 690, 510, 688],
-                borderWidth: 2,
-                backgroundColor: "transparent",
-                borderColor: "rgba(254,86,83,.7)",
-                borderWidth: 2.5,
-                pointBackgroundColor: "transparent",
-                pointBorderColor: "transparent",
-                pointRadius: 4,
-            },
-            {
-                label: "Facebook",
-                data: [450, 258, 390, 162, 440, 570, 438],
-                borderWidth: 2,
-                backgroundColor: "transparent",
-                borderColor: "rgba(63,82,227,.8)",
-                borderWidth: 0,
-                pointBackgroundColor: "transparent",
-                pointBorderColor: "transparent",
-                pointRadius: 4,
-            },
-        ],
-    },
-    options: {
-        legend: {
-            display: false,
-        },
-        scales: {
-            yAxes: [
-                {
-                    gridLines: {
-                        drawBorder: false,
-                        color: "#f2f2f2",
-                    },
-                    ticks: {
-                        beginAtZero: true,
-                        stepSize: 200,
-                    },
-                },
-            ],
-            xAxes: [
-                {
-                    gridLines: {
-                        display: false,
-                    },
-                },
-            ],
-        },
-    },
-});
-
-$("#visitorMap").vectorMap({
-    map: "world_en",
-    backgroundColor: "#ffffff",
-    borderColor: "#f2f2f2",
-    borderOpacity: 0.8,
-    borderWidth: 1,
-    hoverColor: "#000",
-    hoverOpacity: 0.8,
-    color: "#ddd",
-    normalizeFunction: "linear",
-    selectedRegions: false,
-    showTooltip: true,
-    pins: {
-        id: '<div class="jqvmap-circle"></div>',
-        my: '<div class="jqvmap-circle"></div>',
-        th: '<div class="jqvmap-circle"></div>',
-        sy: '<div class="jqvmap-circle"></div>',
-        eg: '<div class="jqvmap-circle"></div>',
-        ae: '<div class="jqvmap-circle"></div>',
-        nz: '<div class="jqvmap-circle"></div>',
-        tl: '<div class="jqvmap-circle"></div>',
-        ng: '<div class="jqvmap-circle"></div>',
-        si: '<div class="jqvmap-circle"></div>',
-        pa: '<div class="jqvmap-circle"></div>',
-        au: '<div class="jqvmap-circle"></div>',
-        ca: '<div class="jqvmap-circle"></div>',
-        tr: '<div class="jqvmap-circle"></div>',
     },
 });
