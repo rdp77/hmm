@@ -37,6 +37,10 @@ class MaintenanceController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
+    public function calculatedAvailibility($mtbf, $mttr)
+    {
+    }
+
     public function index()
     {
         return view('pages.backend.data.maintance.indexMaintenance');

@@ -36,7 +36,7 @@
                 <div class="media-body">
                     <h6>{{ __('Availibility') }}</h6>
                     <div class="text-center">
-                        <img class="img-responsive m-5" src="{{ asset('assets/img/mtbf.svg') }}">
+                        <img class="img-responsive m-5" src="{{ asset('assets/img/availibility.svg') }}">
                     </div>
                 </div>
             </div>
