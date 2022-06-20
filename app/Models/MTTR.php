@@ -40,4 +40,9 @@ class MTTR extends Model
         'maintenance_time' => 'array',
         'time' => 'array',
     ];
+
+    public function maintenance()
+    {
+        return $this->hasOne(Maintenance::class, 'mttr_id');
+    }
 }

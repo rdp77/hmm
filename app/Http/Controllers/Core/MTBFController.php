@@ -126,7 +126,6 @@ class MTBFController extends Controller
 
     public function destroy($id)
     {
-        //
     }
 
     public function report(Request $request)

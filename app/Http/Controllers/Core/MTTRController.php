@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Template\MainController;
+use App\Models\Maintenance;
 use App\Models\MTTR;
 use App\Models\Template\Log;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class MTTRController extends Controller
 {
@@ -37,9 +39,54 @@ class MTTRController extends Controller
         return $maintenanceTotal / $repairs;
     }
 
-    public function index()
+    public function index(Request $req)
     {
-        //
+        if ($req->ajax()) {
+            $data = Maintenance::with('detail', 'mttr')->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('code', function ($row) {
+                    return $row->detail->code;
+                })
+                ->addColumn('hardware_code', function ($row) {
+                    return $row->hardware->code;
+                })
+                ->addColumn('brand', function ($row) {
+                    return $row->hardware->brand->name;
+                })
+                ->addColumn('total_maintenance', function ($row) {
+                    $maintenanceTotal = 0;
+                    foreach ($row->mttr->maintenance_time as $key) {
+                        $maintenanceTotal += $key;
+                    }
+                    return $maintenanceTotal . " Jam";
+                })
+                ->addColumn('time_maintenance', function ($row) {
+                    $timeMaintenance = [];
+                    foreach ($row->mttr->maintenance_time as $key) {
+                        array_push($timeMaintenance, " " . $key . " Jam");
+                    }
+                    return $timeMaintenance;
+                })
+                ->addColumn('total_repair', function ($row) {
+                    return $row->mttr->repairs;
+                })
+                ->addColumn('start_time', function ($row) {
+                    return $row->mttr->time;
+                })
+                ->addColumn('total', function ($row) {
+                    return $row->mttr->total . " Jam";
+                })
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<a onclick="del(' . $row->id . ')" class="btn btn-icon btn-danger btn-block m-1"';
+                    $actionBtn .= 'style="cursor:pointer;color:white"><i class="fas fa-trash"></i></a>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        return view('pages.backend.core.mttr.indexMTTR');
     }
 
     public function create($maintenanceTime, $startTime)
