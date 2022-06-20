@@ -83,8 +83,8 @@ class MaintenanceController extends Controller
             'code' => $request->code
         ]);
         Maintenance::create([
-            'mtbf' => $mtbf->id,
-            'mttr' => $mttr->id,
+            'mtbf_id' => $mtbf->id,
+            'mttr_id' => $mttr->id,
             'hardware_id' => $request->hardware,
             'mt_id' => $mt_dt->id,
         ]);

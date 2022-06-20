@@ -15,8 +15,8 @@ class CreateMaintanceTable extends Migration
     {
         Schema::create('maintenance', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('mtbf');
-            $table->bigInteger('mttr');
+            $table->bigInteger('mtbf_id');
+            $table->bigInteger('mttr_id');
             $table->foreignId('hardware_id')->constrained('hardware');
             $table->foreignId('mt_id')->constrained('mt_dt');
             $table->softDeletes();

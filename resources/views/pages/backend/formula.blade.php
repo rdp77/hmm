@@ -17,7 +17,6 @@
                 <div class="media-icon"><i class="far fa-circle"></i></div>
                 <div class="media-body">
                     <h6>{{ __('MTBF (Mean Time Between Failure)') }}</h6>
-                    <p>by Marina D</p>
                     <div class="text-center">
                         <img class="img-responsive m-5" src="{{ asset('assets/img/mtbf.svg') }}">
                     </div>
@@ -27,7 +26,6 @@
                 <div class="media-icon"><i class="far fa-circle"></i></div>
                 <div class="media-body">
                     <h6>{{ __('MTTR (Mean Time To Repair)') }}</h6>
-                    <p>by @mdo and @fat</p>
                     <div class="text-center">
                         <img class="img-responsive m-5" src="{{ asset('assets/img/mttr.svg') }}">
                     </div>
@@ -37,7 +35,6 @@
                 <div class="media-icon"><i class="far fa-circle"></i></div>
                 <div class="media-body">
                     <h6>{{ __('Availibility') }}</h6>
-                    <p>by Marina D</p>
                     <div class="text-center">
                         <img class="img-responsive m-5" src="{{ asset('assets/img/mtbf.svg') }}">
                     </div>

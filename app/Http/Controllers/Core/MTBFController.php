@@ -38,54 +38,53 @@ class MTBFController extends Controller
 
     public function index(Request $req)
     {
-        dd(Maintenance::with('code')->get());
         if ($req->ajax()) {
-            $data = Maintenance::with('code')->get();
+            $data = Maintenance::with('detail', 'mtbf')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('status', function ($row) {
-                    if ($row->status->value == 'baru') {
-                        $status = '<span class="badge badge-success">';
-                    } else if ($row->status->value == 'normal') {
-                        $status = '<span class="badge badge-primary">';
-                    } else {
-                        $status = '<span class="badge badge-danger">';
-                    }
-                    $status .= Str::headline($row->status->value);
-                    $status .= '</span>';
-                    return $status;
+                ->addColumn('code', function ($row) {
+                    return $row->detail->code;
+                })
+                ->addColumn('hardware_code', function ($row) {
+                    return $row->hardware->code;
                 })
                 ->addColumn('brand', function ($row) {
-                    return $row->brand->name;
+                    return $row->hardware->brand->name;
                 })
-                ->addColumn('purchase_date', function ($row) {
-                    if ($row->purchase_date == null) {
-                        return '-';
-                    } else {
-                        return Carbon::parse($row->purchase_date)->isoFormat('dddd, D-MMM-Y');
-                    }
+                ->addColumn('total_work', function ($row) {
+                    return $row->mtbf->working . " Jam";
                 })
-                ->addColumn('warranty_date', function ($row) {
-                    if ($row->warranty_date == null) {
-                        return '-';
-                    } else {
-                        return Carbon::parse($row->warranty_date)->isoFormat('dddd, D-MMM-Y');
+                ->addColumn('total_breakdown', function ($row) {
+                    $totalBreakdown = 0;
+                    $breakdown = $row->mtbf->breakdown;
+                    foreach ($breakdown as $key) {
+                        $totalBreakdown += $key;
                     }
+                    return $totalBreakdown . " Jam";
+                })
+                ->addColumn('breakdown', function ($row) {
+                    $breakdown = [];
+                    foreach ($row->mtbf->breakdown as $key) {
+                        array_push($breakdown, " " . $key . " Jam");
+                    }
+                    return $breakdown;
+                })
+                ->addColumn('time_breakdown', function ($row) {
+                    return $row->mtbf->time;
+                })
+                ->addColumn('total', function ($row) {
+                    return $row->mtbf->total . " Jam";
                 })
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a class="btn btn-icon btn-success btn-block m-1"';
-                    $actionBtn .= 'href="' . route('hardware.show', $row->id) . '"><i class="fa-solid fa-barcode"></i></a>';
-                    $actionBtn .= '<a class="btn btn-icon btn-primary btn-block m-1"';
-                    $actionBtn .= 'href="' . route('hardware.edit', $row->id) . '"><i class="far fa-edit"></i></a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="btn btn-icon btn-danger btn-block m-1"';
+                    $actionBtn = '<a onclick="del(' . $row->id . ')" class="btn btn-icon btn-danger btn-block m-1"';
                     $actionBtn .= 'style="cursor:pointer;color:white"><i class="fas fa-trash"></i></a>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'brand', 'purchase_date', 'warranty_date', 'status'])
+                ->rawColumns(['action'])
                 ->make(true);
         }
 
-        return view('pages.backend.data.hardware.indexHardware');
+        return view('pages.backend.core.mtbf.indexMTBF');
     }
 
     public function create($totalWork, $breakdown, $timeBreakdown)

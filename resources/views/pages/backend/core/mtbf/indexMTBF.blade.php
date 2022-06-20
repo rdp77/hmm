@@ -17,15 +17,14 @@
                     <th class="text-center">
                         {{ __('NO') }}
                     </th>
-                    <th>{{ __('Serial Number') }}</th>
-                    <th>{{ __('Code') }}</th>
-                    <th>{{ __('Nama') }}</th>
-                    <th>{{ __('Model') }}</th>
-                    <th>{{ __('Status') }}</th>
+                    <th>{{ __('Kode') }}</th>
+                    <th>{{ __('Kode Hardware') }}</th>
                     <th>{{ __('Merk') }}</th>
-                    <th>{{ __('Tanggal Pembelian') }}</th>
-                    <th>{{ __('Tanggal Garansi') }}</th>
-                    <th>{{ __('Deskripsi') }}</th>
+                    <th>{{ __('Total Waktu Operasi') }}</th>
+                    <th>{{ __('Total Waktu Kerusakan') }}</th>
+                    <th>{{ __('Waktu Kerusakan') }}</th>
+                    <th>{{ __('Waktu Mulai Kerusakan') }}</th>
+                    <th>{{ __('MTBF') }}</th>
                     <th>{{ __('Aksi') }}</th>
                 </tr>
             </thead>
@@ -37,7 +36,7 @@
 @endsection
 @section('script')
 <script>
-    var index = '{{ route('hardware.index') }}';    
+    var index = '{{ route('mtbf.index') }}';    
 </script>
-<script src="{{ asset('assets/pages/data/hardware/index.js') }}"></script>
+<script src="{{ asset('assets/pages/data/core/mtbf.js') }}"></script>
 @endsection

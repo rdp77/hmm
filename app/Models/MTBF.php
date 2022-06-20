@@ -43,6 +43,6 @@ class MTBF extends Model
 
     public function maintenance()
     {
-        return $this->belongsTo(MTBF::class, 'mtbf');
+        return $this->hasOne(Maintenance::class, 'mtbf_id');
     }
 }

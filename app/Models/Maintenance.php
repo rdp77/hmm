@@ -22,8 +22,8 @@ class Maintenance extends Model
      * @var array
      */
     protected $fillable = [
-        'mtbf',
-        'mttr',
+        'mtbf_id',
+        'mttr_id',
         'hardware_id',
         'mt_id',
         'created_by',
@@ -31,13 +31,18 @@ class Maintenance extends Model
         'deleted_by',
     ];
 
-    public function code()
+    public function detail()
     {
         return $this->belongsTo(MaintenanceDetail::class, 'mt_id');
     }
 
     public function mtbf()
     {
-        return $this->belongsTo(MTBF::class, 'mtbf');
+        return $this->belongsTo(MTBF::class, 'mtbf_id');
+    }
+
+    public function hardware()
+    {
+        return $this->belongsTo(Hardware::class, 'hardware_id');
     }
 }

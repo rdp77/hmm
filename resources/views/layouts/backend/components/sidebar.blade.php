@@ -100,7 +100,7 @@
                     <i class="fas fa-tools"></i><span>{{ __('MTTR') }}</span>
                 </a>
             </li>
-            <li class="menu-header">{{ __('Laporan') }}</li>
+            {{-- <li class="menu-header">{{ __('Laporan') }}</li>
             <li class="{{ Request::route()->getName() == 'maintenance.index' ? 'active' : (
                 Request::route()->getName() == 'dashboard.log' ? 'active' : '') }}">
                 <a href="{{ route('maintenance.index') }}" class="nav-link">
@@ -112,7 +112,7 @@
                 <a href="{{ route('maintenance.index') }}" class="nav-link">
                     <i class="fas fa-file-alt"></i><span>{{ __('MTTR') }}</span>
                 </a>
-            </li>
+            </li> --}}
         </ul>
         <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
             <a href="{{ route('formula') }}" class="btn btn-primary btn-lg btn-block btn-icon-split">

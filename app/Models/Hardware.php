@@ -47,4 +47,9 @@ class Hardware extends Model
     {
         return $this->belongsTo(Brands::class, 'brand_id');
     }
+
+    public function maintenance()
+    {
+        return $this->hasMany(Maintenance::class, 'hardware_id');
+    }
 }
