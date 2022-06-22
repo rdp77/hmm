@@ -1,6 +1,5 @@
 ---
 deployment:
-  tasks:
-    - export DEPLOYPATH=/home/u1776287/public_html/hmm
-    - /bin/cp index.php $DEPLOYPATH
-    - /bin/cp -R assets $DEPLOYPATH
+tasks:
+- export DEPLOYPATH=/home/u1776287/public_html/hmm
+- /bin/cp -r * $DEPLOYPATH
