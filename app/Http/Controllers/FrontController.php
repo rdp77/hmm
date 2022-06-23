@@ -39,12 +39,17 @@ class FrontController extends Controller
     public function search($code)
     {
         $check = Hardware::where('code', $code)->first();
-        $url = Str::slug($check->code);
 
-        return $check ? response()->json([
-            'status' => 'success', 'url' => route('result', $url)
-        ]) :
-            response()->json(['status' => 'error', 'data' => 'Data Hardware Tidak Ada'], 404);
+        if (!$check == null) {
+            $url = Str::slug($check->code) ?? 'hmm';
+            return response()->json([
+                'status' => 'success', 'url' => route('result', $url)
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error', 'data' => 'Data Hardware Tidak Ada'
+        ], 404);
     }
 
     public function result($code)
