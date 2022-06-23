@@ -41,7 +41,7 @@ class FrontController extends Controller
         $check = Hardware::where('code', $code)->first();
 
         if (!$check == null) {
-            $url = Str::slug($check->code) ?? 'hmm';
+            $url = Str::slug($check->code);
             return response()->json([
                 'status' => 'success', 'url' => route('result', $url)
             ]);
