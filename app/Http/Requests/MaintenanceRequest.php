@@ -29,12 +29,29 @@ class MaintenanceRequest extends FormRequest
     {
 
         $rules = [
-            'name' => ['required', 'string', 'max:255'],
-            'brand_id' => ['required', 'integer'],
-            'status' => ['required']
+            'hardware' => 'required',
+            'total_work' => ['required_if:maintenance_time.*,null|required_with:breakdown'],
+            'breakdown.*' => ['required_with:total_work'],
+            'maintenance_time.*' => ['required_if:total_work,null'],
         ];
 
         return $rules;
+    }
+
+    /**
+     * Custom message for validation
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'hardware.required' => 'Kolom Hardware harus di isi',
+            'total_work.required_with' => 'Kolom Total Waktu Kerja (Tanpa Kerusakan) harus di isi',
+            'breakdown.*.required_with' => 'Kolom Waktu Kerusakan harus di isi',
+            'total_work.required_if' => 'Kolom Total Waktu Kerja (Tanpa Kerusakan) harus di isi',
+            'maintenance_time.*.required_if' => 'Kolom Total Maintenance Harus Di Isi',
+        ];
     }
 
     /**

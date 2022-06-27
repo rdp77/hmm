@@ -38,3 +38,62 @@ $("#addMTTR").click(function () {
         showMeridian: false,
     });
 });
+
+function removeCard(index) {
+    $("#mycard" + index).remove();
+}
+
+let count = 0;
+$("#addAdditional").click(function () {
+    count++;
+    $("#additional").append(
+        '<div class="card" id="mycard' +
+            count +
+            '"><div class="card-header"><h4>Data Maintenance Tambahan ' +
+            '</h4><div class="card-header-action">' +
+            '<a class="btn btn-icon btn-danger" href="#" data-dismiss="#mycard' +
+            count +
+            '"><i class="fas fa-times"></i></a>' +
+            '</div></div><div class="card-body">' +
+            count +
+            "</div></div>"
+    );
+    $("[data-dismiss]").each(function () {
+        var me = $(this),
+            target = me.data("dismiss");
+
+        me.click(function () {
+            $(target).fadeOut(function () {
+                $(target).remove();
+            });
+            return false;
+        });
+    });
+});
+
+$("#hardware_1").on("change", function () {
+    var hardwareId = this.value;
+    $("#maintenance").html("");
+    $.ajax({
+        url: getMaintenanceUrl,
+        type: "POST",
+        data: {
+            hardware_id: hardwareId,
+        },
+        dataType: "json",
+        success: function (result) {
+            $("#maintenance").html(
+                '<option value="">PILIH KODE MAINTENANCE</option>'
+            );
+            $.each(result.data, function (key, value) {
+                $("#maintenance").append(
+                    '<option value="' +
+                        value.id +
+                        '">' +
+                        value.code +
+                        "</option>"
+                );
+            });
+        },
+    });
+});

@@ -4,15 +4,18 @@ namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Template\MainController;
+use App\Http\Requests\MaintenanceRequest;
 use App\Models\Hardware;
 use App\Models\Maintenance;
 use App\Models\MaintenanceDetail;
 use App\Models\MTBF;
 use App\Models\MTTR;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use LDAP\Result;
 use Yajra\DataTables\DataTables;
 
 class MaintenanceController extends Controller
@@ -71,12 +74,17 @@ class MaintenanceController extends Controller
                     return Carbon::parse($row->created_at)->isoFormat('dddd, D-MMM-Y');
                 })
                 ->addColumn('availibility', function ($row) {
-                    return $row->availibility . "%";
+                    return $row->availability . "%";
                 })
                 ->make(true);
         }
 
-        return view('pages.backend.data.maintance.indexMaintenance');
+        return view('pages.backend.data.maintance.indexMaintenance')
+            ->with([
+                'mtbf' => $this->getStatistics('mtbf', 'total'),
+                'mttr' => $this->getStatistics('mttr', 'total'),
+                'availibility' => $this->getStatistics('maintenance', 'availability')
+            ]);
     }
 
     public function create()
@@ -89,43 +97,55 @@ class MaintenanceController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(MaintenanceRequest $request)
     {
+        // Create Datas
+        $mtbf = $this->mtbf->create($request->total_work, $request->breakdown, $request->time_breakdown);
+        $mttr = $this->mttr->create($request->maintenance_time, $request->start_time);
+
         // Check Duplicate
         $mtbf = MTBF::whereDate('created_at', '=', date('Y-m-d'))->first();
         $mttr = MTTR::whereDate('created_at', '=', date('Y-m-d'))->first();
-        if ($mtbf) {
+        if ($mtbf && $request->total_work != null) {
             return response()->json(['error' => 'Data MTBF sudah ada untuk tanggal ini!'], 400);
         } elseif ($mttr) {
             return response()->json(['error' => 'Data MTTR sudah ada untuk tanggal ini!'], 400);
         }
-        // Create Datas
-        $mtbf = $this->mtbf->create($request->total_work, $request->breakdown, $request->time_breakdown);
-        $mttr = $this->mttr->create($request->maintenance_time, $request->start_time);
-        // Stored Data
-        $mtbf = MTBF::create([
-            'working' => $mtbf["total_work"],
-            'breakdown' => $mtbf["breakdown"],
-            'total' => $mtbf["mtbf"],
-            'time' => $mtbf["time_breakdown"],
-        ]);
-        $mttr = MTTR::create([
-            'maintenance_time' => $mttr["maintenance_time"],
-            'time' => $mttr["start_time_maintenance"],
-            'repairs' => count($mttr["maintenance_time"]),
-            'total' => $mttr["mttr"]
-        ]);
 
-        $mt_dt = MaintenanceDetail::create([
-            'code' => $request->code
-        ]);
-        Maintenance::create([
-            'mtbf_id' => $mtbf->id,
-            'mttr_id' => $mttr->id,
-            'hardware_id' => $request->hardware,
-            'mt_id' => $mt_dt->id,
-            'availability' => $this->calculatedAvailibility($mtbf->total, $mttr->total),
-        ]);
+        // Stored Data
+        if ($request->total_work != null && count($request->maintenance_time) == 1) {
+            // Create Data MTBF
+            return 'mtbf';
+        } elseif ($request->total_work == null) {
+            // Create Data MTBF 
+            return 'mttr';
+        } else {
+            // Create ALL Data MTBF & MTTR
+            return 'kabeh';
+            $mtbf = MTBF::create([
+                'working' => $mtbf["total_work"],
+                'breakdown' => $mtbf["breakdown"],
+                'total' => $mtbf["mtbf"],
+                'time' => $mtbf["time_breakdown"],
+            ]);
+            $mttr = MTTR::create([
+                'maintenance_time' => $mttr["maintenance_time"],
+                'time' => $mttr["start_time_maintenance"],
+                'repairs' => count($mttr["maintenance_time"]),
+                'total' => $mttr["mttr"]
+            ]);
+
+            $mt_dt = MaintenanceDetail::create([
+                'code' => $request->code
+            ]);
+            Maintenance::create([
+                'mtbf_id' => $mtbf->id,
+                'mttr_id' => $mttr->id,
+                'hardware_id' => $request->hardware,
+                'mt_id' => $mt_dt->id,
+                'availability' => $this->calculatedAvailibility($mtbf->total, $mttr->total),
+            ]);
+        }
 
         return response()->json([
             'status' => 'success',
@@ -194,22 +214,35 @@ class MaintenanceController extends Controller
         }
     }
 
-    public function getStatistics()
+    function getStatistics($table, $column)
     {
-        $now = Carbon::now();
-        $year = $now->year;
-        $month = $now->month;
-        $uptime = $mtbf = $mttr = [];
-        $maintenance = $this->getData($month, $year);
+        // $data = DB::table($table)
+        //     ->select('id', 'created_at', 'availability')
+        //     ->get()
+        //     ->groupBy(function ($date) {
+        //         //return Carbon::parse($date->created_at)->format('Y'); // grouping by years
+        //         return Carbon::parse($date->created_at)->format('m'); // grouping by months
+        //     });
+        $year = Carbon::now()->format('Y');
+        $data = DB::table($table)
+            // monthname for name month
+            ->selectRaw('year(created_at) as year, month(created_at) as month, sum(' . $column . ') as total')
+            ->whereYear('created_at', $year)
+            ->groupBy('year', 'month')
+            ->orderByRaw('min(created_at) desc')
+            ->pluck('total', 'month')
+            ->toArray();
 
+        $dataArr = [];
+        for ($i = 1; $i <= 12; $i++) {
+            if (isset($data[$i])) {
+                $dataArr[$i] = $data[$i];
+            } else {
+                $dataArr[$i] = 0;
+            }
+        }
 
-
-        return dd($maintenance);
-        // return [
-        //     'uptime' => $uptime,
-        //     'mtbf' => $mtbf,
-        //     'mttr' => $mttr,
-        // ];
+        return json_encode(array_values($dataArr));
     }
 
     function getData($month, $year)
@@ -235,5 +268,17 @@ class MaintenanceController extends Controller
             $mtbf[] = $value->mtbf->total;
             $mttr[] = $value->mttr->total;
         }
+    }
+
+    function getMaintenance(Request $req)
+    {
+        $data['maintenance'] = Maintenance::with('detail')
+            ->where("hardware_id", $req->hardware_id)
+            ->get()->pluck('detail');
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data['maintenance'],
+        ]);
     }
 }

@@ -38,6 +38,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::resource('maintenance', MaintenanceController::class);
 Route::get('/maintenance-statistics', [MaintenanceController::class, 'getStatistics'])
     ->name('maintenance.statistics');
+Route::post('/get-maintenance', [MaintenanceController::class, 'getMaintenance'])
+    ->name('maintenance.getMaintenance');
 
 // Server Monitor
 Route::get('/server-monitor', [DashboardController::class, 'serverMonitor'])

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\APIController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/count', [APIController::class, 'getCount']);
+Route::get('/statistics', [APIController::class, 'getStatistics']);
+Route::get('/search/{code}', [APIController::class, 'search']);
+Route::get('/maintenance', [APIController::class, 'getMaintenance']);

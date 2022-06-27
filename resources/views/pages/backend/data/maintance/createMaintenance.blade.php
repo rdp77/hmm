@@ -129,9 +129,44 @@
             </div>
         </div>
     </div>
-    <div id="addAdditional"></div>
+    <div id="additional"></div>
+    <div class="card" id="mycard-dimiss2">
+        <div class="card-header">
+            <h4>Dismiss</h4>
+            <div class="card-header-action">
+                <a data-dismiss="#mycard-dimiss2" class="btn btn-icon btn-danger" href="#"><i
+                        class="fas fa-times"></i></a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <div class="d-block">
+                            <label class="control-label">{{ __('Hardware') }}<code>*</code></label>
+                        </div>
+                        <select class="form-control select2 ajax" id="hardware_1" name="hardware_1">
+                            @foreach ($hardware as $h)
+                            <option value="{{ $h->id }}">{{ $h->name.__(' | ').$h->brand->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <div class="d-block">
+                            <label class="control-label">{{ __('Kode Maintenance') }}<code>*</code></label>
+                        </div>
+                        <select class="select2 ajax" name="maintenance_1" id="maintenance">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="text-center">
-        <button class="btn btn-light mr-1" type="button">{{ __('Tambah Ketergantungan Hardware') }}</button>
+        <button class="btn btn-light mr-1" id="addAdditional" type="button">{{ __('Tambah Ketergantungan Hardware')
+            }}</button>
         <button class="btn btn-primary mr-1" type="button" onclick="save()">{{ __('Tambah Data Maintenance') }}</button>
     </div>
 </form>
@@ -140,6 +175,7 @@
 <script>
     var url = '{{ route('maintenance.store') }}';
     var index = '{{ route('maintenance.index') }}';
+    var getMaintenanceUrl = '{{ route('maintenance.getMaintenance') }}';
 </script>
 <script src="{{ asset('assets/pages/stored.js') }}"></script>
 <script src="{{ asset('assets/pages/addMaintance.js') }}"></script>

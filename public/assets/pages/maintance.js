@@ -98,7 +98,7 @@ var uptime = new Chart(statistics_chart, {
         datasets: [
             {
                 label: "Uptime",
-                data: [55, 20, 30, 31, 100, 99, 92, 85, 92, 50, 40, 90],
+                data: availibility,
                 borderWidth: 5,
                 borderColor: "#6777ef",
                 backgroundColor: "transparent",
@@ -160,9 +160,7 @@ var maintenance = new Chart(ctx, {
         datasets: [
             {
                 label: "MTBF",
-                data: [
-                    460, 458, 330, 502, 430, 610, 488, 568, 568, 568, 568, 568,
-                ],
+                data: mtbf,
                 borderWidth: 2,
                 backgroundColor: "rgba(63,82,227,.8)",
                 borderWidth: 0,
@@ -174,10 +172,7 @@ var maintenance = new Chart(ctx, {
             },
             {
                 label: "MTTR",
-                data: [
-                    390, 600, 390, 280, 600, 430, 638, 488, 568, 568, 568, 568,
-                    568,
-                ],
+                data: mttr,
                 borderWidth: 2,
                 backgroundColor: "rgba(254,86,83,.7)",
                 borderWidth: 0,
