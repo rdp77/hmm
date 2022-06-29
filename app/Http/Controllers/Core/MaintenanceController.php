@@ -331,7 +331,7 @@ class MaintenanceController extends Controller
             }
         }
 
-        return json_encode(array_values($dataArr));
+        return array_values($dataArr);
     }
 
     function getData($month, $year)
