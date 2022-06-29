@@ -40,6 +40,7 @@ class MTBFController extends Controller
     {
         if ($req->ajax()) {
             $data = Maintenance::with('detail', 'mtbf')->get();
+            // when null []
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('code', function ($row) {
@@ -126,6 +127,12 @@ class MTBFController extends Controller
 
     public function destroy($id)
     {
+        $mtbf = MTBF::find($id);
+        $maintenance = Maintenance::find($mtbf->maintenance->id);
+        $maintenance->mtbf_id = null;
+        $maintenance->save();
+        // calculate availability again
+        $mtbf->delete();
     }
 
     public function report(Request $request)

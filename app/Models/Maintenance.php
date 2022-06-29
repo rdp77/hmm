@@ -51,4 +51,20 @@ class Maintenance extends Model
     {
         return $this->belongsTo(Hardware::class, 'hardware_id');
     }
+
+    public function hasMTBF()
+    {
+        return $this->mtbf();
+    }
+
+    /**
+     * Determine if the given relation is loaded.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function relationLoaded($key)
+    {
+        return array_key_exists($key, $this->relations);
+    }
 }

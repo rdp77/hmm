@@ -53,7 +53,7 @@ class APIController extends Controller
         if (!$check == null) {
             $url = Str::slug($check->code);
             return response()->json([
-                'status' => 'success', 'url' => route('result', $url)
+                'status' => 'success', 'data' => route('result', $url)
             ]);
         }
 
