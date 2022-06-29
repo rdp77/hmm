@@ -65,11 +65,12 @@ class APIController extends Controller
 
     public function getStatistics()
     {
-        return [
-            ['mtbf'] => $this->calculatedStatistics('mtbf', 'total'),
-            ['mttr'] => $this->calculatedStatistics('mttr', 'total'),
-            ['availibility'] => $this->calculatedStatistics('maintenance', 'availability')
-        ];
+        $data = [];
+        $data['mtbf'] = $this->calculatedStatistics('mtbf', 'total');
+        $data['mttr'] = $this->calculatedStatistics('mttr', 'total');
+        $data['availibility'] = $this->calculatedStatistics('maintenance', 'availability');
+
+        return $data;
     }
 
     public function getMaintenance()
@@ -114,6 +115,6 @@ class APIController extends Controller
             }
         }
 
-        return $dataArr;
+        return array_values($dataArr);
     }
 }
