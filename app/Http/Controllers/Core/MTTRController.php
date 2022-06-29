@@ -49,7 +49,9 @@ class MTTRController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Maintenance::with('detail', 'mttr')->get();
+            $data = Maintenance::with('detail', 'mttr')->whereHas('mttr', function ($query) {
+                $query->where('mttr_id', '!=', null);
+            })->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('code', function ($row) {

@@ -44,7 +44,9 @@ class MTBFController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Maintenance::with('detail', 'mtbf')->get();
+            $data = Maintenance::with('detail', 'mtbf')->whereHas('mtbf', function ($query) {
+                $query->where('mtbf_id', '!=', null);
+            })->get();
             // when null []
             return DataTables::of($data)
                 ->addIndexColumn()
