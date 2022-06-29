@@ -66,9 +66,9 @@ class APIController extends Controller
     public function getStatistics()
     {
         return [
-            'mtbf' => $this->calculatedStatistics('mtbf', 'total'),
-            'mttr' => $this->calculatedStatistics('mttr', 'total'),
-            'availibility' => $this->calculatedStatistics('maintenance', 'availability')
+            ['mtbf'] => $this->calculatedStatistics('mtbf', 'total'),
+            ['mttr'] => $this->calculatedStatistics('mttr', 'total'),
+            ['availibility'] => $this->calculatedStatistics('maintenance', 'availability')
         ];
     }
 
