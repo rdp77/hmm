@@ -59,7 +59,7 @@ class APIController extends Controller
 
         return response()->json([
             'status' => 'error', 'data' => 'Data Hardware Tidak Ada'
-        ], 404);
+        ]);
     }
 
     public function getStatistics()
