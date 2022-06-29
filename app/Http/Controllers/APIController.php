@@ -9,6 +9,7 @@ use App\Models\Hardware;
 use App\Models\Maintenance;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 
@@ -65,9 +66,9 @@ class APIController extends Controller
     public function getStatistics()
     {
         return [
-            'mtbf' => $this->Maintenance->getStatistics('mtbf', 'total'),
-            'mttr' => $this->Maintenance->getStatistics('mttr', 'total'),
-            'availibility' => $this->Maintenance->getStatistics('maintenance', 'availability')
+            'mtbf' => $this->calculatedStatistics('mtbf', 'total'),
+            'mttr' => $this->calculatedStatistics('mttr', 'total'),
+            'availibility' => $this->calculatedStatistics('maintenance', 'availability')
         ];
     }
 
@@ -91,5 +92,28 @@ class APIController extends Controller
         }
 
         return $data;
+    }
+
+    function calculatedStatistics($table, $column)
+    {
+        $year = Carbon::now()->format('Y');
+        $data = DB::table($table)
+            ->selectRaw('year(created_at) as year, month(created_at) as month, sum(' . $column . ') as total')
+            ->whereYear('created_at', $year)
+            ->groupBy('year', 'month')
+            ->orderByRaw('min(created_at) desc')
+            ->pluck('total', 'month')
+            ->toArray();
+
+        $dataArr = [];
+        for ($i = 1; $i <= 12; $i++) {
+            if (isset($data[$i])) {
+                $dataArr[$i] = $data[$i];
+            } else {
+                $dataArr[$i] = 0;
+            }
+        }
+
+        return array_values($dataArr);
     }
 }

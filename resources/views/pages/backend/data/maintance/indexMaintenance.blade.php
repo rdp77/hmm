@@ -64,12 +64,9 @@
 @endsection
 @section('script')
 <script>
-    // var mtbf = {{ $mtbf }};    
-    // var mttr = {{ $mttr }};
-    // var availibility = {{ $availibility }};    
-    var mtbf = {{ str_replace('&quot;', '', json_encode($mtbf)) }} ;    
-    var mttr = {{ str_replace('&quot;', '', json_encode($mttr)) }} ;
-    var availibility = {{ str_replace('&quot;', '', json_encode($availibility)) }} ;
+    var mtbf = {{ $mtbf }};    
+    var mttr = {{ $mttr }};
+    var availibility = {{ $availibility }};    
     var index = '{{ route('maintenance.index') }}';    
 </script>
 <script type="text/javascript" src="{{ asset('assets/pages/maintance.js') }}"></script>
