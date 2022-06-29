@@ -110,7 +110,7 @@ class APIController extends Controller
             if (isset($data[$i])) {
                 $dataArr[$i] = (float)$data[$i];
             } else {
-                $dataArr[$i] = number_format(0, 2);
+                $dataArr[$i] = (float)number_format(0, 2);
             }
         }
 
