@@ -114,6 +114,6 @@ class APIController extends Controller
             }
         }
 
-        return array_values($dataArr);
+        return $dataArr;
     }
 }
