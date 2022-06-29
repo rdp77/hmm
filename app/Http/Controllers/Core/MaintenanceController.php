@@ -325,9 +325,9 @@ class MaintenanceController extends Controller
         $dataArr = [];
         for ($i = 1; $i <= 12; $i++) {
             if (isset($data[$i])) {
-                $dataArr[$i] = $data[$i];
+                $dataArr[$i] = (float)$data[$i];
             } else {
-                $dataArr[$i] = 0;
+                $dataArr[$i] = (float)0;
             }
         }
 
