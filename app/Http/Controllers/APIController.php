@@ -65,12 +65,11 @@ class APIController extends Controller
 
     public function getStatistics()
     {
-        $data = [];
-        $data['mtbf'] = $this->calculatedStatistics('mtbf', 'total');
-        $data['mttr'] = $this->calculatedStatistics('mttr', 'total');
-        $data['availibility'] = $this->calculatedStatistics('maintenance', 'availability');
-
-        return $data;
+        return response()->json([
+            'mtbf' => $this->calculatedStatistics('mtbf', 'total'),
+            'mttr' => $this->calculatedStatistics('mttr', 'total'),
+            'availibility' => $this->calculatedStatistics('maintenance', 'availability')
+        ]);
     }
 
     public function getMaintenance()
