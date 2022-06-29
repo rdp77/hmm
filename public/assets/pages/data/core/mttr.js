@@ -91,24 +91,24 @@ $.ajaxSetup({
 function del(id) {
     swal({
         title: "Apakah Anda Yakin?",
-        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data mtbf Anda.",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data mttr Anda.",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/data/mtbf/" + id,
+                url: "/data/mttr/" + id,
                 type: "DELETE",
                 success: function () {
-                    swal("Data mtbf berhasil dihapus", {
+                    swal("Data mttr berhasil dihapus", {
                         icon: "success",
                     });
                     table.draw();
                 },
             });
         } else {
-            swal("Data mtbf Anda tidak jadi dihapus!");
+            swal("Data mttr Anda tidak jadi dihapus!");
         }
     });
 }
@@ -116,24 +116,24 @@ function del(id) {
 function delRecycle(id) {
     swal({
         title: "Apakah Anda Yakin?",
-        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data mtbf Anda secara permanen.",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data mttr Anda secara permanen.",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/temp/mtbf/delete/" + id,
+                url: "/temp/mttr/delete/" + id,
                 type: "DELETE",
                 success: function () {
-                    swal("Data mtbf berhasil dihapus", {
+                    swal("Data mttr berhasil dihapus", {
                         icon: "success",
                     });
                     table.draw();
                 },
             });
         } else {
-            swal("Data mtbf Anda tidak jadi dihapus!");
+            swal("Data mttr Anda tidak jadi dihapus!");
         }
     });
 }
@@ -141,18 +141,18 @@ function delRecycle(id) {
 function delAll() {
     swal({
         title: "Apakah Anda Yakin?",
-        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus semua data mtbf Anda secara permanen.",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus semua data mttr Anda secara permanen.",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/temp/mtbf/delete-all",
+                url: "/temp/mttr/delete-all",
                 type: "DELETE",
                 success: function (data) {
                     if (data.status == "success") {
-                        swal("Semua data mtbf berhasil dihapus", {
+                        swal("Semua data mttr berhasil dihapus", {
                             icon: "success",
                         });
                         table.draw();
@@ -165,7 +165,7 @@ function delAll() {
                 },
             });
         } else {
-            swal("Semua data mtbf Anda tidak jadi dihapus!");
+            swal("Semua data mttr Anda tidak jadi dihapus!");
         }
     });
 }
@@ -173,24 +173,24 @@ function delAll() {
 function restore(id) {
     swal({
         title: "Apakah Anda Yakin?",
-        text: "Aksi ini mengembalikan data mtbf Anda.",
+        text: "Aksi ini mengembalikan data mttr Anda.",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/temp/mtbf/restore/" + id,
+                url: "/temp/mttr/restore/" + id,
                 type: "GET",
                 success: function () {
-                    swal("Data mtbf berhasil dikembalikan", {
+                    swal("Data mttr berhasil dikembalikan", {
                         icon: "success",
                     });
                     table.draw();
                 },
             });
         } else {
-            swal("Data mtbf Anda tidak jadi dikembalikan!");
+            swal("Data mttr Anda tidak jadi dikembalikan!");
         }
     });
 }

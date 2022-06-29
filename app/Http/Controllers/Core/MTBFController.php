@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Template\MainController;
 use App\Models\Maintenance;
 use App\Models\MTBF;
 use App\Models\MTTR;
 use App\Models\Template\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\DataTables;
 
 class MTBFController extends Controller
@@ -18,10 +18,9 @@ class MTBFController extends Controller
      *
      * @return void
      */
-    public function __construct(MainController $MainController)
+    public function __construct()
     {
         $this->middleware('auth');
-        $this->MainController = $MainController;
     }
 
     /**
@@ -34,6 +33,12 @@ class MTBFController extends Controller
     {
         // Hours
         return ($totalWork - $totalBreakdown) / $numberOfBreakdown;
+    }
+
+    public function calculatedAvailibility($mtbf, $mttr)
+    {
+        $availibility = $mtbf / ($mtbf + $mttr) * 100;
+        return number_format($availibility, 2, '.', '');
     }
 
     public function index(Request $req)
@@ -127,12 +132,22 @@ class MTBFController extends Controller
 
     public function destroy($id)
     {
+        // Initialize Variable
         $mtbf = MTBF::find($id);
         $maintenance = Maintenance::find($mtbf->maintenance->id);
+
+        // Changes Data Maintenance
         $maintenance->mtbf_id = null;
+        $maintenance->availability = $this->calculatedAvailibility(
+            0,
+            $maintenance->mttr->total
+        );
         $maintenance->save();
-        // calculate availability again
+
+        // Deleted
         $mtbf->delete();
+
+        return Response::json(['status' => 'success']);
     }
 
     public function report(Request $request)

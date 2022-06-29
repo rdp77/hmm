@@ -8,6 +8,7 @@ use App\Models\Maintenance;
 use App\Models\MTTR;
 use App\Models\Template\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\DataTables;
 
 class MTTRController extends Controller
@@ -37,6 +38,12 @@ class MTTRController extends Controller
             $maintenanceTotal += $key;
         }
         return $maintenanceTotal / $repairs;
+    }
+
+    public function calculatedAvailibility($mtbf, $mttr)
+    {
+        $availibility = $mtbf / ($mtbf + $mttr) * 100;
+        return number_format($availibility, 2, '.', '');
     }
 
     public function index(Request $req)
@@ -120,7 +127,19 @@ class MTTRController extends Controller
 
     public function destroy($id)
     {
-        //
+        // Initialize Variable
+        $mttr = MTTR::find($id);
+        $maintenance = Maintenance::find($mttr->maintenance->id);
+
+        // Changes Data Maintenance
+        $maintenance->mttr_id = null;
+        $maintenance->availability = 0;
+        $maintenance->save();
+
+        // Deleted
+        $mttr->delete();
+
+        return Response::json(['status' => 'success']);
     }
 
     public function report(Request $request)

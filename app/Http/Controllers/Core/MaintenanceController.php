@@ -15,7 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
-use LDAP\Result;
 use Yajra\DataTables\DataTables;
 
 class MaintenanceController extends Controller
@@ -117,10 +116,11 @@ class MaintenanceController extends Controller
         } elseif ($mttr && $maintenance->mttr_id != null && $mttrData["mttr"] != 0) {
             return response()->json(['error' => 'Data MTTR sudah ada untuk tanggal ini!'], 400);
         }
-        //* Create All MTBF and MTTR
-        //* Create MTBF and then MTTR
-        //* Create MTTR and then MTBF
-        //* Delete and Create
+        //* Create All MTBF and MTTR => SOLVED
+        //* Create MTBF and then MTTR => SOLVED
+        //* Create MTTR and then MTBF => SOLVED
+        //* Delete MTBF and Create MTTR => SOLVED
+        //* Delete MTTR and Create MTBF => SOLVED
 
         // Stored Data
         if ($request->total_work != null && $mttrData["mttr"] != 0) {
