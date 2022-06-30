@@ -108,12 +108,51 @@ class APIController extends Controller
         $dataArr = [];
         for ($i = 1; $i <= 12; $i++) {
             if (isset($data[$i])) {
-                $dataArr[$i] = (float)$data[$i];
+                $total = (float)$data[$i];
             } else {
-                $dataArr[$i] = (float)number_format(0, 2);
+                $total = (float)0.0;
             }
+            switch ($i) {
+                case 1:
+                    $tgl = 'Januari';
+                    break;
+                case 2:
+                    $tgl = 'Februari';
+                    break;
+                case 3:
+                    $tgl = 'Maret';
+                    break;
+                case 4:
+                    $tgl = 'April';
+                    break;
+                case 5:
+                    $tgl = 'Mei';
+                    break;
+                case 6:
+                    $tgl = 'Juni';
+                    break;
+                case 7:
+                    $tgl = 'Juli';
+                    break;
+                case 8:
+                    $tgl = 'Agustus';
+                    break;
+                case 9:
+                    $tgl = 'September';
+                    break;
+                case 10:
+                    $tgl = 'Oktober';
+                    break;
+                case 11:
+                    $tgl = 'November';
+                    break;
+                case 12:
+                    $tgl = 'Desember';
+                    break;
+            }
+            array_push($dataArr, ['nama' => $tgl, 'total' => $total]);
         }
 
-        return array_values($dataArr);
+        return $dataArr;
     }
 }
