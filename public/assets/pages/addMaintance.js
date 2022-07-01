@@ -43,42 +43,42 @@ function removeCard(index) {
     $("#mycard" + index).remove();
 }
 
-let count = 0;
 $("#addAdditional").click(function () {
-    count++;
-    $("#additional").append(
-        '<div class="card" id="mycard' +
-            count +
-            '"><div class="card-header"><h4>Data Maintenance Tambahan ' +
-            '</h4><div class="card-header-action">' +
-            '<a class="btn btn-icon btn-danger" href="#" data-dismiss="#mycard' +
-            count +
-            '"><i class="fas fa-times"></i></a>' +
-            '</div></div><div class="card-body">' +
-            count +
-            "</div></div>"
-    );
-    $("[data-dismiss]").each(function () {
-        var me = $(this),
-            target = me.data("dismiss");
+    let count = Math.random().toString(36).substring(7);
+    $.ajax({
+        url: "/add-dependency/" + count,
+        type: "GET",
+        data: {
+            code: count,
+        },
+        success: function (result) {
+            $("#additional").append(result);
+            $("[data-dismiss]").each(function () {
+                var me = $(this),
+                    target = me.data("dismiss");
 
-        me.click(function () {
-            $(target).fadeOut(function () {
-                $(target).remove();
+                me.click(function () {
+                    $(target).fadeOut(function () {
+                        $(target).remove();
+                    });
+                    return false;
+                });
             });
-            return false;
-        });
+            $(".select2").select2();
+            $("#maintenance_" + count).select2();
+        },
     });
 });
 
-$("#hardware_1").on("change", function () {
-    var hardwareId = this.value;
-    $("#maintenance").html("");
+function getMaintenance(selectObject) {
+    var value = selectObject.value;
+    var id = selectObject.id.split("_")[1];
+    $("#maintenance_" + id).html("");
     $.ajax({
         url: getMaintenanceUrl,
         type: "POST",
         data: {
-            hardware_id: hardwareId,
+            hardware_id: value,
         },
         dataType: "json",
         success: function (result) {
@@ -86,7 +86,7 @@ $("#hardware_1").on("change", function () {
                 '<option value="">PILIH KODE MAINTENANCE</option>'
             );
             $.each(result.data, function (key, value) {
-                $("#maintenance").append(
+                $("#maintenance_" + id).append(
                     '<option value="' +
                         value.id +
                         '">' +
@@ -96,4 +96,4 @@ $("#hardware_1").on("change", function () {
             });
         },
     });
-});
+}

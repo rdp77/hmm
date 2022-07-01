@@ -104,17 +104,19 @@ class MaintenanceController extends Controller
         $mttrData = $this->mttr->create($request->maintenance_time, $request->start_time);
 
         // Check Duplicate
-        $mtbf = MTBF::whereDate('created_at', '=', date('Y-m-d'))->first();
-        $mttr = MTTR::whereDate('created_at', '=', date('Y-m-d'))->first();
+        $mtbf = MTBF::whereDate('created_at', '=', date('Y-m-d'))
+            ->where($request->hardware)->first();
+        $mttr = MTTR::whereDate('created_at', '=', date('Y-m-d'))
+            ->where($request->hardware)->first();
         $maintenance = Maintenance::whereDate('created_at', '=', date('Y-m-d'))->first();
         // return $maintenance ?? 0;
 
         if ($mtbf && $mttr && $maintenance) {
             return response()->json(['error' => 'Data Sudah Ada!'], 400);
         } elseif ($mtbf && $request->total_work != null) {
-            return response()->json(['error' => 'Data MTBF sudah ada untuk tanggal ini!'], 400);
+            return response()->json(['error' => 'Data MTBF untuk hardware ini sudah ada untuk tanggal sekarang!'], 400);
         } elseif ($mttr && $maintenance->mttr_id != null && $mttrData["mttr"] != 0) {
-            return response()->json(['error' => 'Data MTTR sudah ada untuk tanggal ini!'], 400);
+            return response()->json(['error' => 'Data MTTR untuk hardware ini sudah ada untuk tanggal sekarang!'], 400);
         }
         //* Create All MTBF and MTTR => SOLVED
         //* Create MTBF and then MTTR => SOLVED
@@ -369,5 +371,23 @@ class MaintenanceController extends Controller
             'status' => 'success',
             'data' => $data['maintenance'],
         ]);
+    }
+
+    function addAdditional($count)
+    {
+        $data = '<div class="card" id="mycard-dimiss' . $count . '"><div class="card-header">';
+        $data .= '<h4>Hardware Ketergantungan</h4><div class="card-header-action">';
+        $data .= '<a data-dismiss="#mycard-dimiss' . $count . '" class="btn btn-icon btn-danger" href="#">';
+        $data .= '<i class="fas fa-times"></i></a></div></div><div class="card-body"> <div class="row">';
+        $data .= '<div class="col"> <div class="form-group"> <div class="d-block">      ';
+        $data .= '<label class="control-label">Hardware<code>*</code></label></div>';
+        $data .= '<select class="form-control select2 ajax" onchange="getMaintenance(this)" id="hardware_' . $count . '" name="hardware_' . $count . '">';
+        foreach (Hardware::all() as $h) {
+            $data .= '<option value="' . $h->id . '">' . $h->name . ' | ' . $h->brand->name . '</option>';
+        };
+        $data .= ' </select> </div></div><div class="col"> <div class="form-group"> <div class="d-block">';
+        $data .= '<label class="control-label">Kode Maintenance<code>*</code></label> </div>';
+        $data .= '<select class="select2 ajax" name="maintenance_' . $count . '" id="maintenance_' . $count . '"> </select> </div></div></div></div></div>';
+        return $data;
     }
 }

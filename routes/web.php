@@ -40,7 +40,8 @@ Route::get('/maintenance-statistics', [MaintenanceController::class, 'getStatist
     ->name('maintenance.statistics');
 Route::post('/get-maintenance', [MaintenanceController::class, 'getMaintenance'])
     ->name('maintenance.getMaintenance');
-
+Route::get('/add-dependency/{count}', [MaintenanceController::class, 'addAdditional'])
+    ->name('maintenance.addAdditional');
 // Server Monitor
 Route::get('/server-monitor', [DashboardController::class, 'serverMonitor'])
     ->name('dashboard.server-monitor');
