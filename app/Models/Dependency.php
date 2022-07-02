@@ -21,10 +21,11 @@ class Dependency extends Model
      */
     protected $fillable = [
         'mt_id',
+        'parent_mt_id'
     ];
 
     public function maintenance()
     {
-        return $this->hasMany(Maintenance::class, 'mt_id');
+        return $this->belongsTo(Maintenance::class, 'parent_mt_id');
     }
 }

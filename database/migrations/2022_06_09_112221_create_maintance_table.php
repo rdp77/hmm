@@ -20,7 +20,6 @@ class CreateMaintanceTable extends Migration
             $table->foreignId('hardware_id')->constrained('hardware');
             $table->foreignId('mt_id')->constrained('mt_dt');
             $table->double('availability');
-            $table->foreignId('dependency')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -144,8 +144,6 @@ class MaintenanceController extends Controller
         })->where('hardware_id', $request->hardware)->first();
         $maintenance = Maintenance::whereDate('created_at', '=', date('Y-m-d'))
             ->where('hardware_id', '=', $request->hardware)
-            ->orWhere('mtbf_id', '!=', null)
-            ->orWhere('mttr_id', '!=', null)
             ->first();
         // return response()->json([
         //     'maintenance' => $maintenance,
@@ -170,15 +168,6 @@ class MaintenanceController extends Controller
         //* Mengisi Data MTBF dan MTTR lalu membuat MTBF dan MTTR lagi ditanggal sama dengan hari ini => Solved
         //* Mengisi Data MTBF dan Membuat MTBF lagi ditanggal sama dengan hari ini => Solved
         //* Mengisi Data MTTR dan Membuat MTTR lagi ditanggal sama dengan hari ini => Solved
-        // return response()->json([
-        //     'mtbf' => $mtbf != null ? true : false,
-        //     'mtbfDate' => $mtbfDate != null ? true : false,
-        //     'mttr' => $mttr != null ? true : false,
-        //     'mttrDate' => $mttrDate != null ? true : false,
-        //     'maintenance' => $maintenance != null ? true : false,
-        //     'mttrData' => $mttrData,
-        //     'mtbfData' => $mtbfData
-        // ]);
         if ($mtbf != null && $mttr != null) {
             return response()->json([
                 'error' => 'Data Sudah Ada untuk tanggal dan hardware ini!'
@@ -219,7 +208,7 @@ class MaintenanceController extends Controller
                     $mt_dt = MaintenanceDetail::create([
                         'code' => $request->code
                     ]);
-                    Maintenance::create([
+                    $maintenance = Maintenance::create([
                         'mtbf_id' => $mtbf->id,
                         'hardware_id' => $request->hardware,
                         'mt_id' => $mt_dt->id,
@@ -246,7 +235,7 @@ class MaintenanceController extends Controller
                     $mt_dt = MaintenanceDetail::create([
                         'code' => $request->code
                     ]);
-                    Maintenance::create([
+                    $maintenance = Maintenance::create([
                         'mttr_id' => $mttr->id,
                         'hardware_id' => $request->hardware,
                         'mt_id' => $mt_dt->id,
@@ -271,7 +260,7 @@ class MaintenanceController extends Controller
                 $mt_dt = MaintenanceDetail::create([
                     'code' => $request->code
                 ]);
-                Maintenance::create([
+                $maintenance = Maintenance::create([
                     'mtbf_id' => $mtbf->id,
                     'mttr_id' => $mttr->id,
                     'hardware_id' => $request->hardware,
@@ -286,11 +275,19 @@ class MaintenanceController extends Controller
             }
 
             if ($dependency->isNotEmpty()) {
+                $availibilityData = [];
                 foreach ($dependency as $key) {
+                    $maintenanceID = MaintenanceDetail::find($key->values()[1])->maintenance->id;
                     Dependency::create([
-                        'mt_id' => $key->values()[1]
+                        'mt_id' => $maintenanceID,
+                        'parent_mt_id' => $maintenance->id
                     ]);
+                    array_push($availibilityData, $maintenanceID);
                 }
+                array_push($availibilityData, $maintenance->availability);
+                // Calculate Avalibility Per Items                
+                $maintenance->availability = array_sum($availibilityData);
+                $maintenance->save();
             }
 
             return response()->json([
@@ -303,17 +300,6 @@ class MaintenanceController extends Controller
                 'error' => $e->getMessage()
             ], 400);
         }
-
-        // if ($request->total_work != null && count($request->maintenance_time) == 1) {
-
-        //     return 'mtbf';
-        // } elseif ($request->total_work == null) {
-
-        //     return 'mttr';
-        // } else {
-
-        //     return 'kabeh';
-        // }        
     }
 
     public function show($id)
