@@ -47,6 +47,11 @@ class Maintenance extends Model
         return $this->belongsTo(MTTR::class, 'mttr_id');
     }
 
+    public function dependency()
+    {
+        return $this->belongsTo(Dependency::class, 'mt_id');
+    }
+
     public function hardware()
     {
         return $this->belongsTo(Hardware::class, 'hardware_id');

@@ -42,8 +42,12 @@ class MTTRController extends Controller
 
     public function calculatedAvailibility($mtbf, $mttr)
     {
-        $availibility = $mtbf / ($mtbf + $mttr) * 100;
-        return number_format($availibility, 2, '.', '');
+        if ($mtbf == null && $mttr == null) {
+            return 0;
+        } else {
+            $availibility = $mtbf / ($mtbf + $mttr) * 100;
+            return number_format($availibility, 2, '.', '');
+        }
     }
 
     public function index(Request $req)
@@ -87,7 +91,7 @@ class MTTRController extends Controller
                     return $row->mttr->total . " Jam";
                 })
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a onclick="del(' . $row->id . ')" class="btn btn-icon btn-danger btn-block m-1"';
+                    $actionBtn = '<a onclick="del(' . $row->mttr->id . ')" class="btn btn-icon btn-danger btn-block m-1"';
                     $actionBtn .= 'style="cursor:pointer;color:white"><i class="fas fa-trash"></i></a>';
                     return $actionBtn;
                 })
@@ -135,9 +139,14 @@ class MTTRController extends Controller
 
         // Changes Data Maintenance
         $maintenance->mttr_id = null;
-        $maintenance->availability = 0;
+        $maintenance->availability = $this->calculatedAvailibility(
+            $maintenance->mtbf == null ? 0 : $maintenance->mtbf,
+            0
+        );
         $maintenance->save();
-
+        if ($maintenance->mttr == null && $maintenance->mtbf == null) {
+            $maintenance->delete();
+        }
         // Deleted
         $mttr->delete();
 

@@ -37,8 +37,12 @@ class MTBFController extends Controller
 
     public function calculatedAvailibility($mtbf, $mttr)
     {
-        $availibility = $mtbf / ($mtbf + $mttr) * 100;
-        return number_format($availibility, 2, '.', '');
+        if ($mtbf == 0 && $mttr == 0) {
+            return 0;
+        } else {
+            $availibility = $mtbf / ($mtbf + $mttr) * 100;
+            return number_format($availibility, 2, '.', '');
+        }
     }
 
     public function index(Request $req)
@@ -84,7 +88,7 @@ class MTBFController extends Controller
                     return $row->mtbf->total . " Jam";
                 })
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a onclick="del(' . $row->id . ')" class="btn btn-icon btn-danger btn-block m-1"';
+                    $actionBtn = '<a onclick="del(' . $row->mtbf->id . ')" class="btn btn-icon btn-danger btn-block m-1"';
                     $actionBtn .= 'style="cursor:pointer;color:white"><i class="fas fa-trash"></i></a>';
                     return $actionBtn;
                 })
@@ -142,10 +146,12 @@ class MTBFController extends Controller
         $maintenance->mtbf_id = null;
         $maintenance->availability = $this->calculatedAvailibility(
             0,
-            $maintenance->mttr->total
+            $maintenance->mttr == null ? 0 : $maintenance->mttr
         );
         $maintenance->save();
-
+        if ($maintenance->mtbf == null && $maintenance->mttr == null) {
+            $maintenance->delete();
+        }
         // Deleted
         $mtbf->delete();
 

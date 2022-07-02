@@ -5,17 +5,21 @@ namespace App\Http\Controllers\Core;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Template\MainController;
 use App\Http\Requests\MaintenanceRequest;
+use App\Models\Dependency;
 use App\Models\Hardware;
 use App\Models\Maintenance;
 use App\Models\MaintenanceDetail;
 use App\Models\MTBF;
 use App\Models\MTTR;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\DataTables;
+
+use function Clue\StreamFilter\fun;
 
 class MaintenanceController extends Controller
 {
@@ -99,133 +103,206 @@ class MaintenanceController extends Controller
 
     public function store(MaintenanceRequest $request)
     {
+        $dependency = $request->except([
+            'hardware', 'code', 'total_work', 'breakdown',
+            'time_breakdown', 'maintenance_time', 'start_time'
+        ]);
+        // Split the dependency into two parts        
+        $dependencyCount = count($dependency);
+        // check data odd
+        if ($dependencyCount % 2 != 0) {
+            return response()->json([
+                'error' => "Data Ketergantungan Hardware Harus Lengkap"
+            ], 400);
+        }
+        // Check Duplicate Maintenance Dependency        
+        $duplicate = [];
+        $dependencyValues = array_values($dependency);
+        foreach ($dependencyValues as $key => $value) {
+            // check data odd
+            if ($key % 2 != 0) {
+                $duplicate[] = $value;
+            }
+        }
+        $duplicate = array_unique($duplicate);
+        if (count($duplicate) != ($dependencyCount / 2)) {
+            return Response::json([
+                'error' => 'Data Maintenance Pada Ketergantungan Hardware Ada yang Sama'
+            ], 400);
+        }
+        $dependency = collect($dependency)->split($dependencyCount / 2);
         // Create Datas
         $mtbfData = $this->mtbf->create($request->total_work, $request->breakdown, $request->time_breakdown);
         $mttrData = $this->mttr->create($request->maintenance_time, $request->start_time);
 
         // Check Duplicate
-        $mtbf = MTBF::whereDate('created_at', '=', date('Y-m-d'))
-            ->where($request->hardware)->first();
-        $mttr = MTTR::whereDate('created_at', '=', date('Y-m-d'))
-            ->where($request->hardware)->first();
-        $maintenance = Maintenance::whereDate('created_at', '=', date('Y-m-d'))->first();
-        // return $maintenance ?? 0;
-
-        if ($mtbf && $mttr && $maintenance) {
-            return response()->json(['error' => 'Data Sudah Ada!'], 400);
-        } elseif ($mtbf && $request->total_work != null) {
-            return response()->json(['error' => 'Data MTBF untuk hardware ini sudah ada untuk tanggal sekarang!'], 400);
-        } elseif ($mttr && $maintenance->mttr_id != null && $mttrData["mttr"] != 0) {
-            return response()->json(['error' => 'Data MTTR untuk hardware ini sudah ada untuk tanggal sekarang!'], 400);
+        $mtbf = Maintenance::with('mtbf')->whereHas('mtbf', function ($query) {
+            $query->whereDate('created_at', '=', date('Y-m-d'));
+        })->where('hardware_id', $request->hardware)->first();
+        $mttr = Maintenance::with('mttr')->whereHas('mttr', function ($query) {
+            $query->whereDate('created_at', '=', date('Y-m-d'));
+        })->where('hardware_id', $request->hardware)->first();
+        $maintenance = Maintenance::whereDate('created_at', '=', date('Y-m-d'))
+            ->where('hardware_id', '=', $request->hardware)
+            ->orWhere('mtbf_id', '!=', null)
+            ->orWhere('mttr_id', '!=', null)
+            ->first();
+        // return response()->json([
+        //     'maintenance' => $maintenance,
+        //     'mtbf' => $mtbf,
+        //     'mttr' => $mttr,
+        // ]);
+        // Status Belum Ada Data
+        //* Mengisi Data MTBF dan MTTR lalu membuat MTBF dan MTTR lagi ditanggal sama dengan hari ini => Solved
+        //* Mengisi Data MTBF dan Membuat MTBF lagi ditanggal sama dengan hari ini => Solved
+        //* Mengisi Data MTTR dan Membuat MTTR lagi ditanggal sama dengan hari ini => Solved
+        //* Mengisi Data MTBF dan Membuat MTTR lagi ditanggal sama dengan hari ini => Solved
+        //* Mengisi Data MTTR dan Membuat MTBF lagi ditanggal sama dengan hari ini => Solved
+        // Sudah Ada Data MTBF hari kemarin
+        //* Mengisi Data MTBF dan MTTR lalu membuat MTBF dan MTTR lagi ditanggal sama dengan hari ini => Solved
+        //* Mengisi Data MTBF dan Membuat MTBF lagi ditanggal sama dengan hari ini => Solved
+        //* Mengisi Data MTTR dan Membuat MTTR lagi ditanggal sama dengan hari ini => Solved
+        // Sudah Ada Data MTTR hari kemarin 
+        //* Mengisi Data MTBF dan MTTR lalu membuat MTBF dan MTTR lagi ditanggal sama dengan hari ini => Solved
+        //* Mengisi Data MTBF dan Membuat MTBF lagi ditanggal sama dengan hari ini => Solved
+        //* Mengisi Data MTTR dan Membuat MTTR lagi ditanggal sama dengan hari ini => Solved
+        // Sudah Ada Data MTBF dan MTTR hari kemarin
+        //* Mengisi Data MTBF dan MTTR lalu membuat MTBF dan MTTR lagi ditanggal sama dengan hari ini => Solved
+        //* Mengisi Data MTBF dan Membuat MTBF lagi ditanggal sama dengan hari ini => Solved
+        //* Mengisi Data MTTR dan Membuat MTTR lagi ditanggal sama dengan hari ini => Solved
+        // return response()->json([
+        //     'mtbf' => $mtbf != null ? true : false,
+        //     'mtbfDate' => $mtbfDate != null ? true : false,
+        //     'mttr' => $mttr != null ? true : false,
+        //     'mttrDate' => $mttrDate != null ? true : false,
+        //     'maintenance' => $maintenance != null ? true : false,
+        //     'mttrData' => $mttrData,
+        //     'mtbfData' => $mtbfData
+        // ]);
+        if ($mtbf != null && $mttr != null) {
+            return response()->json([
+                'error' => 'Data Sudah Ada untuk tanggal dan hardware ini!'
+            ], 400);
+        } elseif ($mtbf && $mttr != null) {
+            return response()->json([
+                'error' => 'Data MTBF untuk hardware ini sudah ada untuk tanggal sekarang!'
+            ], 400);
+        } elseif ($mttr && $mtbf != null) {
+            return response()->json([
+                'error' => 'Data MTTR untuk hardware ini sudah ada untuk tanggal sekarang!'
+            ], 400);
         }
         //* Create All MTBF and MTTR => SOLVED
         //* Create MTBF and then MTTR => SOLVED
         //* Create MTTR and then MTBF => SOLVED
         //* Delete MTBF and Create MTTR => SOLVED
         //* Delete MTTR and Create MTBF => SOLVED
-
         // Stored Data
-        if ($request->total_work != null && $mttrData["mttr"] != 0) {
-            // Create ALL Data MTBF & MTTR   
-            $mtbf = MTBF::create([
-                'working' => $mtbfData["total_work"],
-                'breakdown' => $mtbfData["breakdown"],
-                'total' => $mtbfData["mtbf"],
-                'time' => $mtbfData["time_breakdown"],
-            ]);
-            $mttr = MTTR::create([
-                'maintenance_time' => $mttrData["maintenance_time"],
-                'time' => $mttrData["start_time_maintenance"],
-                'repairs' => count($mttrData["maintenance_time"]),
-                'total' => $mttrData["mttr"]
-            ]);
+        try {
+            if ($mtbf == null && $mttrData["mttr"] == 0) {
+                // Stored Data MTBF
+                $mtbf = MTBF::create([
+                    'working' => $mtbfData["total_work"],
+                    'breakdown' => $mtbfData["breakdown"],
+                    'total' => $mtbfData["mtbf"],
+                    'time' => $mtbfData["time_breakdown"],
+                ]);
 
-            $mt_dt = MaintenanceDetail::create([
-                'code' => $request->code
-            ]);
-            Maintenance::create([
-                'mtbf_id' => $mtbf->id,
-                'mttr_id' => $mttr->id,
-                'hardware_id' => $request->hardware,
-                'mt_id' => $mt_dt->id,
-                'availability' => $this->calculatedAvailibility($mtbf->total, $mttr->total),
-            ]);
-        } else if ($request->total_work != null) {
-            // Data MTBF
-            // if ($mtbf) {
-            //     // Update Data MTBF
-            //     $mtbf->working = $mtbfData["total_work"];
-            //     $mtbf->breakdown = $mtbfData["breakdown"];
-            //     $mtbf->total = $mtbfData["mtbf"];
-            //     $mtbf->time = $mtbfData["time_breakdown"];
-            //     $mtbf->save();
-            //     // Check Data Maintenance
-            // } else {
-            //     // Create Data MTBF
-            //     $mtbf = MTBF::create([
-            //         'working' => $mtbfData["total_work"],
-            //         'breakdown' => $mtbfData["breakdown"],
-            //         'total' => $mtbfData["mtbf"],
-            //         'time' => $mtbfData["time_breakdown"],
-            //     ]);
-            // }
-            $mtbf = MTBF::create([
-                'working' => $mtbfData["total_work"],
-                'breakdown' => $mtbfData["breakdown"],
-                'total' => $mtbfData["mtbf"],
-                'time' => $mtbfData["time_breakdown"],
-            ]);
+                if ($maintenance) {
+                    $maintenance->mtbf_id = $mtbf->id;
+                    $maintenance->availability = $this->calculatedAvailibility(
+                        $mtbf->total,
+                        $maintenance->mttr->total
+                    );
+                    $maintenance->save();
+                } else {
+                    $mt_dt = MaintenanceDetail::create([
+                        'code' => $request->code
+                    ]);
+                    Maintenance::create([
+                        'mtbf_id' => $mtbf->id,
+                        'hardware_id' => $request->hardware,
+                        'mt_id' => $mt_dt->id,
+                        'availability' => $this->calculatedAvailibility($mtbf->total ?? 0, $mttr->total ?? 0),
+                    ]);
+                }
+            } elseif ($mttr == null && $request->total_work == null) {
+                // Create Data MTTR
+                $mttr = MTTR::create([
+                    'maintenance_time' => $mttrData["maintenance_time"],
+                    'time' => $mttrData["start_time_maintenance"],
+                    'repairs' => count($mttrData["maintenance_time"]),
+                    'total' => $mttrData["mttr"]
+                ]);
 
-            if ($maintenance) {
-                $maintenance->mtbf_id = $mtbf->id;
-                $maintenance->availability = $this->calculatedAvailibility(
-                    $mtbf->total,
-                    $maintenance->mttr->total
-                );
-                $maintenance->save();
-            } else {
+                if ($maintenance) {
+                    $maintenance->mttr_id = $mttr->id;
+                    $maintenance->availability = $this->calculatedAvailibility(
+                        $maintenance->mtbf->total,
+                        $mttr->total
+                    );
+                    $maintenance->save();
+                } else {
+                    $mt_dt = MaintenanceDetail::create([
+                        'code' => $request->code
+                    ]);
+                    Maintenance::create([
+                        'mttr_id' => $mttr->id,
+                        'hardware_id' => $request->hardware,
+                        'mt_id' => $mt_dt->id,
+                        'availability' => $this->calculatedAvailibility($mtbf->total ?? 0, $mttr->total ?? 0),
+                    ]);
+                }
+            } elseif ($mtbf == null && $mttr == null) {
+                // Create ALL Data MTBF & MTTR   
+                $mtbf = MTBF::create([
+                    'working' => $mtbfData["total_work"],
+                    'breakdown' => $mtbfData["breakdown"],
+                    'total' => $mtbfData["mtbf"],
+                    'time' => $mtbfData["time_breakdown"],
+                ]);
+                $mttr = MTTR::create([
+                    'maintenance_time' => $mttrData["maintenance_time"],
+                    'time' => $mttrData["start_time_maintenance"],
+                    'repairs' => count($mttrData["maintenance_time"]),
+                    'total' => $mttrData["mttr"]
+                ]);
+
                 $mt_dt = MaintenanceDetail::create([
                     'code' => $request->code
                 ]);
                 Maintenance::create([
                     'mtbf_id' => $mtbf->id,
-                    'hardware_id' => $request->hardware,
-                    'mt_id' => $mt_dt->id,
-                    'availability' => $this->calculatedAvailibility($mtbf->total ?? 0, $mttr->total ?? 0),
-                ]);
-            }
-        } else {
-            // Create Data MTTR
-            $mttr = MTTR::create([
-                'maintenance_time' => $mttrData["maintenance_time"],
-                'time' => $mttrData["start_time_maintenance"],
-                'repairs' => count($mttrData["maintenance_time"]),
-                'total' => $mttrData["mttr"]
-            ]);
-
-            if ($maintenance) {
-                $maintenance->mttr_id = $mttr->id;
-                $maintenance->availability = $this->calculatedAvailibility(
-                    $maintenance->mtbf->total,
-                    $mttr->total
-                );
-                $maintenance->save();
-            } else {
-                $mt_dt = MaintenanceDetail::create([
-                    'code' => $request->code
-                ]);
-                Maintenance::create([
                     'mttr_id' => $mttr->id,
                     'hardware_id' => $request->hardware,
                     'mt_id' => $mt_dt->id,
-                    'availability' => $this->calculatedAvailibility($mtbf->total ?? 0, $mttr->total ?? 0),
+                    'availability' => $this->calculatedAvailibility($mtbf->total, $mttr->total),
                 ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'error' => 'Data Tidak Bisa Diupdate Hapus Terlebih Dahulu'
+                ], 400);
             }
+
+            if ($dependency->isNotEmpty()) {
+                foreach ($dependency as $key) {
+                    Dependency::create([
+                        'mt_id' => $key->values()[1]
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'data' => 'Data berhasil disimpan!'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'error' => $e->getMessage()
+            ], 400);
         }
-
-
-
-
 
         // if ($request->total_work != null && count($request->maintenance_time) == 1) {
 
@@ -236,12 +313,7 @@ class MaintenanceController extends Controller
         // } else {
 
         //     return 'kabeh';
-        // }
-
-        return response()->json([
-            'status' => 'success',
-            'data' => 'Data berhasil disimpan!'
-        ]);
+        // }        
     }
 
     public function show($id)
@@ -381,13 +453,13 @@ class MaintenanceController extends Controller
         $data .= '<i class="fas fa-times"></i></a></div></div><div class="card-body"> <div class="row">';
         $data .= '<div class="col"> <div class="form-group"> <div class="d-block">      ';
         $data .= '<label class="control-label">Hardware<code>*</code></label></div>';
-        $data .= '<select class="form-control select2 ajax" onchange="getMaintenance(this)" id="hardware_' . $count . '" name="hardware_' . $count . '">';
+        $data .= '<select class="form-control select2 ajax" onchange="getMaintenance(this)" id="hardware_' . $count . '" name="hardware_' . $count . '" required>';
         foreach (Hardware::all() as $h) {
             $data .= '<option value="' . $h->id . '">' . $h->name . ' | ' . $h->brand->name . '</option>';
         };
         $data .= ' </select> </div></div><div class="col"> <div class="form-group"> <div class="d-block">';
         $data .= '<label class="control-label">Kode Maintenance<code>*</code></label> </div>';
-        $data .= '<select class="select2 ajax" name="maintenance_' . $count . '" id="maintenance_' . $count . '"> </select> </div></div></div></div></div>';
+        $data .= '<select class="select2 ajax" name="maintenance_' . $count . '" id="maintenance_' . $count . '" required> </select> </div></div></div></div></div>';
         return $data;
     }
 }
