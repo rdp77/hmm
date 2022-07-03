@@ -49,7 +49,7 @@ class Maintenance extends Model
 
     public function dependency()
     {
-        return $this->hasMany(Dependency::class, 'parent_mt_id');
+        return $this->hasMany(Dependency::class, 'child_id');
     }
 
     public function hardware()

@@ -11,7 +11,6 @@ use App\Models\Maintenance;
 use App\Models\MaintenanceDetail;
 use App\Models\MTBF;
 use App\Models\MTTR;
-use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -279,7 +278,8 @@ class MaintenanceController extends Controller
                 foreach ($dependency as $key) {
                     $maintenanceID = MaintenanceDetail::find($key->values()[1])->maintenance->id;
                     Dependency::create([
-                        'mt_id' => $maintenanceID,
+                        'hardware_id' => $request->hardware,
+                        'child_id' => $maintenanceID,
                         'parent_mt_id' => $maintenance->id
                     ]);
                     array_push($availibilityData, $maintenanceID);

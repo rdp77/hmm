@@ -15,8 +15,9 @@ class CreateDependencyTable extends Migration
     {
         Schema::create('dependency', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mt_id');
+            $table->foreignId('child_id');
             $table->foreignId('parent_mt_id');
+            $table->foreignId('hardware_id');
             $table->timestamps();
         });
     }

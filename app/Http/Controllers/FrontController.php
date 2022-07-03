@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Core\MaintenanceController;
 use App\Http\Controllers\Template\MainController;
+use App\Models\Dependency;
 use App\Models\Hardware;
 use App\Models\Maintenance;
 use Illuminate\Support\Str;
@@ -54,10 +55,19 @@ class FrontController extends Controller
 
     public function result($code)
     {
-        $hardware = Hardware::with('brand', 'brand.spareparts')->where('code', $code)->first();
+        $hardware = Hardware::with('brand', 'brand.spareparts')->where('code', $code)
+            ->first();
         $barcode = DNS2DFacade::getBarcodeHTML($hardware->code ?? url('/'), 'QRCODE');
-
-        return $hardware ? view('result', compact('hardware', 'barcode')) : abort(404);
+        $dependency = Dependency::with(
+            'maintenance',
+            'maintenance.detail',
+            'maintenance.mtbf',
+            'maintenance.mttr',
+            'maintenance.hardware'
+        )
+            ->where('hardware_id', $hardware->id)
+            ->get();
+        return $hardware ? view('result', compact('hardware', 'barcode', 'dependency')) : abort(404);
     }
 
     public function formula()
@@ -68,14 +78,12 @@ class FrontController extends Controller
     public function maintenance(Request $req)
     {
         if ($req->ajax()) {
-            $data = Maintenance::with('detail', 'mtbf', 'mttr')->get();
+            $data = Maintenance::with('detail', 'mtbf', 'mttr')
+                ->where('hardware_id', $req->code)->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('code', function ($row) {
                     return $row->detail->code;
-                })
-                ->addColumn('hardware_code', function ($row) {
-                    return $row->hardware->code;
                 })
                 ->addColumn('brand', function ($row) {
                     return $row->hardware->brand->name;
@@ -102,14 +110,14 @@ class FrontController extends Controller
     public function mtbf(Request $req)
     {
         if ($req->ajax()) {
-            $data = Maintenance::with('detail', 'mtbf')->get();
+            $data = Maintenance::with('detail', 'mtbf')
+                ->whereHas('mtbf', function ($query) use ($req) {
+                    $query->where('hardware_id', $req->code);
+                })->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('code', function ($row) {
                     return $row->detail->code;
-                })
-                ->addColumn('hardware_code', function ($row) {
-                    return $row->hardware->code;
                 })
                 ->addColumn('brand', function ($row) {
                     return $row->hardware->brand->name;
@@ -145,14 +153,14 @@ class FrontController extends Controller
     public function mttr(Request $req)
     {
         if ($req->ajax()) {
-            $data = Maintenance::with('detail', 'mttr')->get();
+            $data = Maintenance::with('detail', 'mttr')
+                ->whereHas('mttr', function ($query) use ($req) {
+                    $query->where('hardware_id', $req->code);
+                })->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('code', function ($row) {
                     return $row->detail->code;
-                })
-                ->addColumn('hardware_code', function ($row) {
-                    return $row->hardware->code;
                 })
                 ->addColumn('brand', function ($row) {
                     return $row->hardware->brand->name;

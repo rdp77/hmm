@@ -167,7 +167,6 @@ use Illuminate\Support\Carbon;
                                         {{ __('NO') }}
                                     </th>
                                     <th>{{ __('Kode') }}</th>
-                                    <th>{{ __('Kode Hardware') }}</th>
                                     <th>{{ __('Merk') }}</th>
                                     <th>{{ __('Total Waktu Operasi') }}</th>
                                     <th>{{ __('Total Waktu Kerusakan') }}</th>
@@ -191,7 +190,6 @@ use Illuminate\Support\Carbon;
                                         {{ __('NO') }}
                                     </th>
                                     <th>{{ __('Kode') }}</th>
-                                    <th>{{ __('Kode Hardware') }}</th>
                                     <th>{{ __('Merk') }}</th>
                                     <th>{{ __('MTBF') }}</th>
                                     <th>{{ __('MTTR') }}</th>
@@ -213,7 +211,6 @@ use Illuminate\Support\Carbon;
                                         {{ __('NO') }}
                                     </th>
                                     <th>{{ __('Kode') }}</th>
-                                    <th>{{ __('Kode Hardware') }}</th>
                                     <th>{{ __('Merk') }}</th>
                                     <th>{{ __('Total Waktu Maintenance') }}</th>
                                     <th>{{ __('Waktu Maintenance') }}</th>
@@ -231,13 +228,58 @@ use Illuminate\Support\Carbon;
         </div>
     </div>
 </div>
+
+@if (count($dependency) > 0)
+<div class="card">
+    <div class="card-header">
+        <h4>Data Ketergantungan</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Kode Maintenance</th>
+                        <th scope="col">Kode Hardware</th>
+                        <th scope="col">MTBF</th>
+                        <th scope="col">MTTR</th>
+                        <th scope="col">Availibility</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($dependency as $d)
+                    <tr>
+                        <td>
+                            {{ $d->maintenance->detail->code }}
+                        </td>
+                        <td>
+                            {{ $d->maintenance->hardware->code }}
+                        </td>
+                        <td>
+                            {{ $d->maintenance->mtbf->total." Jam" }}
+                        </td>
+                        <td>
+                            {{ $d->maintenance->mttr->total." Jam" }}
+                        </td>
+                        <td>
+                            {{ $d->maintenance->availability."%" }}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@endif
+
 @endsection
 
 @section('script')
 <script>
-    var mtbf = '{{ route('data.mtbf') }}';  
-    var mttr = '{{ route('data.mttr') }}';    
-    var maintenance = '{{ route('data.maintenance') }}';      
+    var mtbf = '{{ route('data.mtbf',$hardware->id) }}';  
+    var mttr = '{{ route('data.mttr',$hardware->id) }}';    
+    var maintenance = '{{ route('data.maintenance',$hardware->id) }}';      
 </script>
 <script src="{{ asset('assets/pages/result.js') }}"></script>
 @endsection

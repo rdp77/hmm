@@ -20,12 +20,13 @@ class Dependency extends Model
      * @var array
      */
     protected $fillable = [
-        'mt_id',
-        'parent_mt_id'
+        'hardware_id',
+        'child_id',
+        'parent_mt_id',
     ];
 
     public function maintenance()
     {
-        return $this->belongsTo(Maintenance::class, 'parent_mt_id');
+        return $this->belongsTo(Maintenance::class, 'child_id');
     }
 }

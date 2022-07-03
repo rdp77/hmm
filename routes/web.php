@@ -25,11 +25,11 @@ Route::get('/search/{code}', [FrontController::class, 'search'])
     ->name('search');
 Route::get('/result/{code}', [FrontController::class, 'result'])
     ->name('result');
-Route::get('/data-maintenance', [FrontController::class, 'maintenance'])
+Route::get('/data-maintenance/{code}', [FrontController::class, 'maintenance'])
     ->name('data.maintenance');
-Route::get('/data-mtbf', [FrontController::class, 'mtbf'])
+Route::get('/data-mtbf/{code}', [FrontController::class, 'mtbf'])
     ->name('data.mtbf');
-Route::get('/data-mttr', [FrontController::class, 'mttr'])
+Route::get('/data-mttr{code}', [FrontController::class, 'mttr'])
     ->name('data.mttr');
 
 // Backend
