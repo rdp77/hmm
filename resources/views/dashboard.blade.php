@@ -7,11 +7,21 @@
 @include('layouts.backend.components.notification')
 <div class="card">
     <div class="card-header">
-        <h4>{{ __("Server Monitor") }}</h4>
+        <h4>{{ __("Cetak QRCode") }}</h4>
         <div class="card-header-action">
-            <a href="{{ route('dashboard.server-monitor') }}" class="btn btn-danger">{{ __('pages.view') }} <i
-                    class="fas fa-chevron-right"></i></a>
+            <a href="javascript:void(0)" id="hardware" class="btn btn-success">{{ __('Print') }} <i
+                    class="fas fa-print"></i></a>
         </div>
+    </div>
+    <div class="card-body">
+        <select class="form-control select2" name="hardware_id" id="hardware_id">
+            @foreach ($hardwareList as $h)
+            <option value="{{ $h->id }}">{{ $h->name.__(' | ').$h->brand->name }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="card-footer">
+
     </div>
 </div>
 <div class="row">
@@ -109,4 +119,7 @@
         </div>
     </div>
 </div>
+@endsection
+@section('script')
+<script src="{{ asset('assets/pages/dashboard.js') }}"></script>
 @endsection

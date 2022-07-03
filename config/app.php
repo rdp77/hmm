@@ -170,6 +170,7 @@ return [
         Laravolt\Indonesia\ServiceProvider::class,
         Sarfraznawaz2005\ServerMonitor\ServiceProvider::class,
         Spatie\Menu\Laravel\MenuServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -237,6 +238,7 @@ return [
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
         'Indonesia' => Laravolt\Indonesia\Facade::class,
         'Menu' => Spatie\Menu\Laravel\Facades\Menu::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

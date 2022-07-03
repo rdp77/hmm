@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 use Sarfraznawaz2005\ServerMonitor\ServerMonitor;
 use Spatie\Activitylog\Models\Activity;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Milon\Barcode\Facades\DNS2DFacade;
 
 class DashboardController extends Controller
 {
@@ -44,13 +46,15 @@ class DashboardController extends Controller
         $brands = Brands::count();
         $logCount = Activity::where('causer_id', Auth::user()->id)
             ->count();
+        $hardwareList = Hardware::with('brand')->get();
 
         return view('dashboard', [
             'log' => $log,
             'users' => $users,
             'hardware' => $hardware,
             'brands' => $brands,
-            'logCount' => $logCount
+            'logCount' => $logCount,
+            'hardwareList' => $hardwareList,
         ]);
     }
 
@@ -79,14 +83,14 @@ class DashboardController extends Controller
         return view('pages.backend.log.IndexLog');
     }
 
-    public function serverMonitor(Request $req)
+    public function print($id)
     {
-        $checkResults = $this->serverMonitor->getChecks();
-        $lastRun = $this->serverMonitor->getLastCheckedTime();
-
-        return view('pages.backend.server.indexServer', compact(
-            'checkResults',
-            'lastRun'
-        ));
+        $hardware = Hardware::findOrFail($id);
+        $name = 'hardware_' . $hardware->code . '.pdf';
+        $barcode = DNS2DFacade::getBarcodeHTML($hardware->code ?? url('/'), 'QRCODE');
+        $pdf = PDF::loadView('pages.print', compact('hardware', 'barcode'));
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->save(public_path($name));
+        return view('pages.viewPrint', compact('name'));
     }
 }
