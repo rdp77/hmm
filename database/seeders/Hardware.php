@@ -16,16 +16,23 @@ class Hardware extends Seeder
     {
         DB::table('hardware')->insert([
             [
-                'code' => 'HRD929292',
+                'code' => 'HW76830722',
                 'name' => 'Laptop',
                 'brand_id' => 1,
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],
             [
-                'code' => 'HRD929291',
-                'name' => 'Keyboard',
+                'code' => 'HW65540622',
+                'name' => 'Monitor',
                 'brand_id' => 2,
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'code' => 'HW26367822',
+                'name' => 'Motherboard',
+                'brand_id' => 1,
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],

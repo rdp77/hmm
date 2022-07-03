@@ -73,7 +73,7 @@ class HardwareController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<a class="btn btn-icon btn-success btn-block m-1"';
-                    $actionBtn .= 'href="' . route('hardware.show', $row->id) . '"><i class="fa-solid fa-barcode"></i></a>';
+                    $actionBtn .= 'href="' . route('print', $row->id) . '" target="_blank"><i class="fa-solid fa-barcode"></i></a>';
                     $actionBtn .= '<a class="btn btn-icon btn-primary btn-block m-1"';
                     $actionBtn .= 'href="' . route('hardware.edit', $row->id) . '"><i class="far fa-edit"></i></a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="btn btn-icon btn-danger btn-block m-1"';
