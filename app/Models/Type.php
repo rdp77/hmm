@@ -31,4 +31,9 @@ class Type extends Model
     {
         return $this->belongsTo(Brands::class, 'brand_id');
     }
+
+    public function hardware()
+    {
+        return $this->hasMany(Hardware::class, 'type_id');
+    }
 }

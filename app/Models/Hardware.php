@@ -27,8 +27,7 @@ class Hardware extends Model
         'serial_number',
         'name',
         'description',
-        'model',
-        'brand_id',
+        'type_id',
         'status',
         'purchase_date',
         'warranty_date'
@@ -43,13 +42,13 @@ class Hardware extends Model
         'status' => HardwareStatusEnum::class
     ];
 
-    public function brand()
-    {
-        return $this->belongsTo(Brands::class, 'brand_id');
-    }
-
     public function maintenance()
     {
         return $this->hasMany(Maintenance::class, 'hardware_id');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class, 'type_id');
     }
 }

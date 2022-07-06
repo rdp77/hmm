@@ -9,6 +9,7 @@ use App\Http\Requests\HardwareRequest;
 use App\Models\Brands;
 use App\Models\Hardware;
 use App\Models\Template\ActivityList;
+use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Response;
@@ -54,8 +55,11 @@ class HardwareController extends Controller
                     $status .= '</span>';
                     return $status;
                 })
+                ->addColumn('model', function ($row) {
+                    return $row->type->name;
+                })
                 ->addColumn('brand', function ($row) {
-                    return $row->brand->name;
+                    return $row->type->brand->name;
                 })
                 ->addColumn('purchase_date', function ($row) {
                     if ($row->purchase_date == null) {
@@ -90,10 +94,10 @@ class HardwareController extends Controller
     public function create()
     {
         $status = HardwareStatusEnum::cases();
-        $brand = Brands::all();
+        $type = Type::with('brand')->get();
         $code = $this->getRandomCode();
         return view('pages.backend.data.hardware.createHardware', [
-            'brand' => $brand,
+            'type' => $type,
             'code' => $code,
             'status' => $status
         ]);
@@ -111,7 +115,7 @@ class HardwareController extends Controller
             'code' => $req->code,
             'serial_number' => $req->serial_number,
             'model' => $req->model,
-            'brand_id' => $req->brand_id,
+            'type_id' => $req->type_id,
             'description' => $req->description,
             'purchase_date' => $purchaseDate,
             'warranty_date' => $warrantyDate,
@@ -137,10 +141,10 @@ class HardwareController extends Controller
     {
         $status = HardwareStatusEnum::cases();
         $hardware = Hardware::find($id);
-        $brand = Brands::all();
+        $type = Type::with('brand')->get();
         return view('pages.backend.data.hardware.updateHardware', [
             'hardware' => $hardware,
-            'brand' => $brand,
+            'type' => $type,
             'status' => $status
         ]);
     }
@@ -156,8 +160,7 @@ class HardwareController extends Controller
             ->update([
                 'name' => $req->name,
                 'serial_number' => $req->serial_number,
-                'model' => $req->model,
-                'brand_id' => $req->brand_id,
+                'type_id' => $req->type_id,
                 'description' => $req->description,
                 'purchase_date' => $purchaseDate,
                 'warranty_date' => $warrantyDate,
@@ -215,8 +218,11 @@ class HardwareController extends Controller
                     $status .= '</span>';
                     return $status;
                 })
+                ->addColumn('model', function ($row) {
+                    return $row->type->name;
+                })
                 ->addColumn('brand', function ($row) {
-                    return $row->brand->name;
+                    return $row->type->brand->name;
                 })
                 ->addColumn('purchase_date', function ($row) {
                     if ($row->purchase_date == null) {

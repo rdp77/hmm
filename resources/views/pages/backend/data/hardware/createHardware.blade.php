@@ -38,7 +38,11 @@
                             <div class="d-block">
                                 <label class="control-label">{{ __('Model') }}</label>
                             </div>
-                            <input type="text" class="form-control" name="model">
+                            <select class="form-control select2" name="type_id">
+                                @foreach ($type as $t)
+                                <option value="{{ $t->id }}">{{ $t->name." | ".$t->brand->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="col">
@@ -82,16 +86,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="d-block">
-                        <label class="control-label">{{ __('Merk') }}<code>*</code></label>
-                    </div>
-                    <select class="form-control select2" name="brand_id">
-                        @foreach ($brand as $b)
-                        <option value="{{ $b->id }}">{{ $b->name }}</option>
-                        @endforeach
-                    </select>
                 </div>
                 <div class="form-group">
                     <label for="email">{{ __('Deskripsi') }}</label>

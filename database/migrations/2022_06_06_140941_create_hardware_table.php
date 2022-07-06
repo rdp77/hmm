@@ -20,9 +20,7 @@ class CreateHardwareTable extends Migration
             $table->string('serial_number')->nullable();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->string('model')->nullable();
-            $table->foreignId('brand_id')->constrained('brands');
-            // $table->string('type')->nullable();
+            $table->foreignId('type_id')->constrained('type');
             $table->enum('status', ['baru', 'normal', 'rusak'])->default('baru');
             $table->date('purchase_date')->nullable();
             $table->date('warranty_date')->nullable();

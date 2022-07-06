@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Template\MainController;
 use App\Models\Brands;
 use App\Models\Hardware;
+use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,7 +47,7 @@ class DashboardController extends Controller
         $brands = Brands::count();
         $logCount = Activity::where('causer_id', Auth::user()->id)
             ->count();
-        $hardwareList = Hardware::with('brand')->get();
+        $hardwareList = Type::with('brand')->get();
 
         return view('dashboard', [
             'log' => $log,

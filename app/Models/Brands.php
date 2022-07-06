@@ -34,11 +34,6 @@ class Brands extends Model
         return $this->hasMany(Spareparts::class, 'brand_id');
     }
 
-    public function hardware()
-    {
-        return $this->hasMany(Hardware::class, 'brand_id');
-    }
-
     public function type()
     {
         return $this->hasMany(Type::class, 'brand_id');

@@ -22,8 +22,8 @@ class DatabaseSeeder extends Seeder
             ActivityType::class,
             ActivityList::class,
             Brand::class,
+            Type::class,
             Hardware::class,
-            Type::class
         ]);
     }
 }
