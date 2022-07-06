@@ -130,6 +130,25 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+                <div class="d-block">
+                    <label class="control-label">{{ __('Tipe Kerusakan') }}<code>*</code></label>
+                </div>
+                <div class="selectgroup w-100">
+                    <label class="selectgroup-item">
+                        <input type="radio" name="type" value="repaired" class="selectgroup-input" checked>
+                        <span class="selectgroup-button">DIPERBAIKI</span>
+                    </label>
+                    <label class="selectgroup-item">
+                        <input type="radio" name="type" value="replaced" class="selectgroup-input">
+                        <span class="selectgroup-button">DIGANTI</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>{{ __('Deskripsi Kerusakan') }}<code>*</code></label>
+                <textarea class="form-control" name="notes" style="height:100px" required></textarea>
+            </div>
         </div>
     </div>
     <div id="additional"></div>

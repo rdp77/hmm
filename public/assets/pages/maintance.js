@@ -34,6 +34,7 @@ var table = $("#table").DataTable({
         { data: "mttr" },
         { data: "date" },
         { data: "availibility" },
+        { data: "type" },
     ],
     buttons: [
         {

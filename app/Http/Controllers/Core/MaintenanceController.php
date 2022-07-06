@@ -15,10 +15,10 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\DataTables;
-
-use function Clue\StreamFilter\fun;
+use Illuminate\Support\Str;
 
 class MaintenanceController extends Controller
 {
@@ -77,12 +77,21 @@ class MaintenanceController extends Controller
                     $mttr = $row->mttr->total ?? 0;
                     return  $mttr . " Jam";
                 })
+                ->addColumn('type', function ($row) {
+                    if ($row->type == 'replaced') {
+                        $status = 'DIGANTI';
+                    } else {
+                        $status = 'DIPERBAIKI';
+                    }
+                    return '<span class="badge badge-primary">' . $status . '</span>';
+                })
                 ->addColumn('date', function ($row) {
                     return Carbon::parse($row->created_at)->isoFormat('dddd, D-MMM-Y');
                 })
                 ->addColumn('availibility', function ($row) {
                     return $row->availability . "%";
                 })
+                ->rawColumns(['type'])
                 ->make(true);
         }
 
@@ -115,7 +124,8 @@ class MaintenanceController extends Controller
         }
         $dependency = $request->except([
             'hardware', 'code', 'total_work', 'breakdown',
-            'time_breakdown', 'maintenance_time', 'start_time'
+            'time_breakdown', 'maintenance_time', 'start_time',
+            'type', 'notes'
         ]);
         // Split the dependency into two parts        
         $dependencyCount = count($dependency);
@@ -276,6 +286,8 @@ class MaintenanceController extends Controller
                 'hardware_id' => $request->hardware,
                 'mt_id' => $mt_dt->id,
                 'availability' => $this->calculatedAvailibility($mtbf->total, $mttr->total),
+                'type' => $request->type,
+                'notes' => $request->notes
             ]);
             // } else {
             //     return response()->json([
@@ -306,6 +318,7 @@ class MaintenanceController extends Controller
                 'data' => 'Data berhasil disimpan!'
             ]);
         } catch (Exception $e) {
+            Log::debug($e->getMessage() . ' ' . $e->getLine());
             return response()->json([
                 'status' => 'error',
                 'error' => $e->getMessage()

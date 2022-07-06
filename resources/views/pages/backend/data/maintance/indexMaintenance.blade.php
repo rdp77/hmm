@@ -55,6 +55,7 @@
                     <th>{{ __('MTTR') }}</th>
                     <th>{{ __('Tanggal Maintenance') }}</th>
                     <th>{{ __('Availibility') }}</th>
+                    <th>{{ __('Tipe Kerusakan') }}</th>
                 </tr>
             </thead>
             <tbody>
