@@ -177,6 +177,42 @@ class ActivityList extends Seeder
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],
+            [
+                'name' => 'Menambahkan tipe baru',
+                'type_id' => 5,
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'name' => 'Mengubah data tipe',
+                'type_id' => 5,
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'name' => 'Menghapus data tipe',
+                'type_id' => 5,
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'name' => 'Mengembalikan data tipe',
+                'type_id' => 5,
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'name' => 'Menghapus data tipe yang telah dihapus',
+                'type_id' => 5,
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'name' => 'Menghapus semua data tipe yang telah dihapus',
+                'type_id' => 5,
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
         ]);
     }
 }

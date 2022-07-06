@@ -58,16 +58,12 @@
             </li>
             <li class="nav-item dropdown {{ Request::route()->getName() == 'hardware.index' ? 'active' : (
                 Request::route()->getName() == 'hardware.create' ? 'active' : (
-                        Request::route()->getName() == 'hardware.edit' ? 'active' : (
-                            Request::route()->getName() == 'brand.index' ? 'active' : (
-                        Request::route()->getName() == 'brand.create' ? 'active' : (
-                            Request::route()->getName() == 'brand.edit' ? 'active' : (
-                                Request::route()->getName() == 'brand.recycle' ? 'active' : (
-                                    Request::route()->getName() == 'sparepart.index' ? 'active' : (
+                        Request::route()->getName() == 'hardware.edit' ? 'active' : (                            
+                        Request::route()->getName() == 'sparepart.index' ? 'active' : (
                         Request::route()->getName() == 'sparepart.create' ? 'active' : (
                             Request::route()->getName() == 'sparepart.edit' ? 'active' : (
                                 Request::route()->getName() == 'sparepart.recycle' ? 'active' : (
-                                    Request::route()->getName() == 'hardware.show' ? 'active' : ''))))))))))) }}">
+                                    Request::route()->getName() == 'hardware.show' ? 'active' : ''))))))) }}">
                 <a href="{{ route('hardware.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
                     <i class="fas fa-microchip"></i>
                     <span>{{ __('Hardware') }}</span></a>
@@ -75,17 +71,34 @@
                     <li class="{{ Request::route()->getName() == 'hardware.index' ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('hardware.index') }}">{{ __('Daftar') }}</a>
                     </li>
-                    <li class="{{ Request::route()->getName() == 'brand.index' ? 'active' : (
-                        Request::route()->getName() == 'brand.create' ? 'active' : (
-                            Request::route()->getName() == 'brand.edit' ? 'active' : (
-                                Request::route()->getName() == 'brand.recycle' ? 'active' : ''))) }}">
-                        <a class="nav-link" href="{{ route('brand.index') }}">{{ __('Merk') }}</a>
-                    </li>
                     <li class="{{ Request::route()->getName() == 'sparepart.index' ? 'active' : (
                         Request::route()->getName() == 'sparepart.create' ? 'active' : (
                             Request::route()->getName() == 'sparepart.edit' ? 'active' : (
                                 Request::route()->getName() == 'sparepart.recycle' ? 'active' : ''))) }}">
                         <a class="nav-link" href="{{ route('sparepart.index') }}">{{ __('Sparepart') }}</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown {{ Request::route()->getName() == 'brand.index' ? 'active' : (
+                        Request::route()->getName() == 'brand.create' ? 'active' : (
+                            Request::route()->getName() == 'brand.edit' ? 'active' : (
+                                Request::route()->getName() == 'brand.recycle' ? 'active' : (
+                                Request::route()->getName() == 'type.index' ? 'active' : (
+                        Request::route()->getName() == 'type.create' ? 'active' : (
+                            Request::route()->getName() == 'type.edit' ? 'active' : (
+                                Request::route()->getName() == 'type.recycle' ? 'active' : ''))))))) }}">
+                <a href="{{ route('brand.index') }}" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-copyright"></i>
+                    <span>{{ __('Merk') }}</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Request::route()->getName() == 'brand.index' ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('brand.index') }}">{{ __('Daftar') }}</a>
+                    </li>
+                    <li class="{{ Request::route()->getName() == 'type.index' ? 'active' : (
+                        Request::route()->getName() == 'type.create' ? 'active' : (
+                            Request::route()->getName() == 'type.edit' ? 'active' : (
+                                Request::route()->getName() == 'type.recycle' ? 'active' : ''))) }}">
+                        <a class="nav-link" href="{{ route('type.index') }}">{{ __('Tipe') }}</a>
                     </li>
                 </ul>
             </li>
@@ -101,19 +114,6 @@
                     <i class="fas fa-tools"></i><span>{{ __('MTTR') }}</span>
                 </a>
             </li>
-            {{-- <li class="menu-header">{{ __('Laporan') }}</li>
-            <li class="{{ Request::route()->getName() == 'maintenance.index' ? 'active' : (
-                Request::route()->getName() == 'dashboard.log' ? 'active' : '') }}">
-                <a href="{{ route('maintenance.index') }}" class="nav-link">
-                    <i class="fas fa-file-alt"></i><span>{{ __('MTBF') }}</span>
-                </a>
-            </li>
-            <li class="{{ Request::route()->getName() == 'maintenance.index' ? 'active' : (
-                Request::route()->getName() == 'dashboard.log' ? 'active' : '') }}">
-                <a href="{{ route('maintenance.index') }}" class="nav-link">
-                    <i class="fas fa-file-alt"></i><span>{{ __('MTTR') }}</span>
-                </a>
-            </li> --}}
         </ul>
         <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
             <a href="{{ route('formula') }}" class="btn btn-primary btn-lg btn-block btn-icon-split">

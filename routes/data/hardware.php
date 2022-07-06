@@ -3,6 +3,7 @@
 use App\Http\Controllers\Data\BrandController;
 use App\Http\Controllers\Data\HardwareController;
 use App\Http\Controllers\Data\SparepartController;
+use App\Http\Controllers\Data\TypeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +21,8 @@ Route::group(['prefix' => 'data'], function () {
     Route::resources([
         'hardware' => HardwareController::class,
         'brand' => BrandController::class,
-        'sparepart' => SparepartController::class
+        'sparepart' => SparepartController::class,
+        'type' => TypeController::class,
     ]);
 });
 
@@ -41,6 +43,16 @@ Route::group(['prefix' => 'temp'], function () {
         Route::group(['prefix' => 'brand'], function () {
             Route::get('/restore/{id}', 'restore')
                 ->name('brand.restore');
+            Route::delete('/delete/{id}', 'delete');
+            Route::delete('/delete-all', 'deleteAll');
+        });
+    });
+    Route::controller(TypeController::class)->group(function () {
+        Route::get('/type', 'recycle')
+            ->name('type.recycle');
+        Route::group(['prefix' => 'type'], function () {
+            Route::get('/restore/{id}', 'restore')
+                ->name('type.restore');
             Route::delete('/delete/{id}', 'delete');
             Route::delete('/delete-all', 'deleteAll');
         });
