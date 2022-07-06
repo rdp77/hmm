@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\DataTables;
-use Illuminate\Support\Str;
 
 class MaintenanceController extends Controller
 {
@@ -463,5 +462,29 @@ class MaintenanceController extends Controller
         $data .= '<label class="control-label">Kode Maintenance<code>*</code></label> </div>';
         $data .= '<select class="select2 ajax" name="maintenance_' . $count . '" id="maintenance_' . $count . '" required> </select> </div></div></div></div></div>';
         return $data;
+    }
+
+    public function dataDamage(Request $req)
+    {
+        if ($req->ajax()) {
+            $data = Maintenance::get(['type', 'notes']);
+            if (request('type')) {
+                $data = $data->where('type', $req->get('type'));
+            }
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('type', function ($row) {
+                    if ($row->type == 'replaced') {
+                        $status = 'DIGANTI';
+                    } else {
+                        $status = 'DIPERBAIKI';
+                    }
+                    return '<span class="badge badge-primary">' . $status . '</span>';
+                })
+                ->rawColumns(['type'])
+                ->make(true);
+        }
+
+        return view('pages.backend.data.maintance.damageMaintenance');
     }
 }

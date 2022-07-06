@@ -102,6 +102,11 @@
                     </li>
                 </ul>
             </li>
+            <li class="{{ Request::route()->getName() == 'data.damage' ? 'active' : '' }}">
+                <a href="{{ route('data.damage') }}" class="nav-link">
+                    <i class="fas fa-timeline"></i><span>{{ __('Kerusakan') }}</span>
+                </a>
+            </li>
             <li class="{{ Request::route()->getName() == 'mtbf.index' ? 'active' : (
                 Request::route()->getName() == 'dashboard.log' ? 'active' : '') }}">
                 <a href="{{ route('mtbf.index') }}" class="nav-link">

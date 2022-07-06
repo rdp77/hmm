@@ -39,5 +39,15 @@
             </select>
         </div>
         @endif
+        @if(Request::route()->getName() == 'data.damage')
+        <div class="form-group">
+            <label>{{ __('Filter Berdasarkan Kerusakan :') }}</label>
+            <select name="type" class="form-control selectric" id="type">
+                <option value="">{{ __('Pilih Kerusakan') }}</option>
+                <option value="replaced">{{ __('Diganti') }}</option>
+                <option value="repaired">{{ __('Diperbaiki') }}</option>
+            </select>
+        </div>
+        @endif
     </div>
 </div>

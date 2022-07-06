@@ -44,6 +44,8 @@ Route::get('/add-dependency/{count}', [MaintenanceController::class, 'addAdditio
     ->name('maintenance.addAdditional');
 Route::get('/print/{id}', [DashboardController::class, 'print'])
     ->name('print');
+Route::get('/data-damage', [MaintenanceController::class, 'dataDamage'])
+    ->name('data.damage');
 // Server Monitor
 Route::get('/server-monitor', [DashboardController::class, 'serverMonitor'])
     ->name('dashboard.server-monitor');
