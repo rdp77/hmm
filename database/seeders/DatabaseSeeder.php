@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ActivityList::class,
             Brand::class,
             Hardware::class,
+            Type::class
         ]);
     }
 }
