@@ -39,6 +39,7 @@
         </div>
     </div>
 </div>
+@include('pages.backend.components.filterSearch')
 <div class="card">
     <div class="card-body">
         <table class="table-striped table" id="table" width="100%">

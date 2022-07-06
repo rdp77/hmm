@@ -19,7 +19,7 @@
     <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
     <div class="alert-body">
         <div class="alert-title">Informasi</div>
-        Data diukur berdasarkan 1 hari (24 jam), data yang teridentifikasi sama akan terdeteksi duplicate.
+        Data diukur berdasarkan 1 hari (24 jam).
     </div>
 </div>
 <form id="stored">

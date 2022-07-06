@@ -54,6 +54,10 @@ class MaintenanceController extends Controller
     {
         if ($req->ajax()) {
             $data = Maintenance::with('detail', 'mtbf', 'mttr')->get();
+            if (request('filter_period')) {
+                $filter_period = now()->subDays(request('filter_period'))->toDateString();
+                $data = $data->where('created_at', '>=', $filter_period);
+            }
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('code', function ($row) {
@@ -102,6 +106,13 @@ class MaintenanceController extends Controller
 
     public function store(MaintenanceRequest $request)
     {
+        // Check When Warranty is Available
+        $hardware = Hardware::with('type.brand')->find($request->hardware)->warranty_date;
+        if ($hardware >= date('Y-m-d')) {
+            return response()->json([
+                'error' => "Hardware masih dapat di garansikan sampai dengan " . Carbon::parse($hardware)->isoFormat('dddd, D-MMM-Y')
+            ], 400);
+        }
         $dependency = $request->except([
             'hardware', 'code', 'total_work', 'breakdown',
             'time_breakdown', 'maintenance_time', 'start_time'
@@ -135,15 +146,15 @@ class MaintenanceController extends Controller
         $mttrData = $this->mttr->create($request->maintenance_time, $request->start_time);
 
         // Check Duplicate
-        $mtbf = Maintenance::with('mtbf')->whereHas('mtbf', function ($query) {
-            $query->whereDate('created_at', '=', date('Y-m-d'));
-        })->where('hardware_id', $request->hardware)->first();
-        $mttr = Maintenance::with('mttr')->whereHas('mttr', function ($query) {
-            $query->whereDate('created_at', '=', date('Y-m-d'));
-        })->where('hardware_id', $request->hardware)->first();
-        $maintenance = Maintenance::whereDate('created_at', '=', date('Y-m-d'))
-            ->where('hardware_id', '=', $request->hardware)
-            ->first();
+        // $mtbf = Maintenance::with('mtbf')->whereHas('mtbf', function ($query) {
+        //     $query->whereDate('created_at', '=', date('Y-m-d'));
+        // })->where('hardware_id', $request->hardware)->first();
+        // $mttr = Maintenance::with('mttr')->whereHas('mttr', function ($query) {
+        //     $query->whereDate('created_at', '=', date('Y-m-d'));
+        // })->where('hardware_id', $request->hardware)->first();
+        // $maintenance = Maintenance::whereDate('created_at', '=', date('Y-m-d'))
+        //     ->where('hardware_id', '=', $request->hardware)
+        //     ->first();
         // return response()->json([
         //     'maintenance' => $maintenance,
         //     'mtbf' => $mtbf,
@@ -167,19 +178,19 @@ class MaintenanceController extends Controller
         //* Mengisi Data MTBF dan MTTR lalu membuat MTBF dan MTTR lagi ditanggal sama dengan hari ini => Solved
         //* Mengisi Data MTBF dan Membuat MTBF lagi ditanggal sama dengan hari ini => Solved
         //* Mengisi Data MTTR dan Membuat MTTR lagi ditanggal sama dengan hari ini => Solved
-        if ($mtbf != null && $mttr != null) {
-            return response()->json([
-                'error' => 'Data Sudah Ada untuk tanggal dan hardware ini!'
-            ], 400);
-        } elseif ($mtbf && $mttr != null) {
-            return response()->json([
-                'error' => 'Data MTBF untuk hardware ini sudah ada untuk tanggal sekarang!'
-            ], 400);
-        } elseif ($mttr && $mtbf != null) {
-            return response()->json([
-                'error' => 'Data MTTR untuk hardware ini sudah ada untuk tanggal sekarang!'
-            ], 400);
-        }
+        // if ($mtbf != null && $mttr != null) {
+        //     return response()->json([
+        //         'error' => 'Data Sudah Ada untuk tanggal dan hardware ini!'
+        //     ], 400);
+        // } elseif ($mtbf && $mttr != null) {
+        //     return response()->json([
+        //         'error' => 'Data MTBF untuk hardware ini sudah ada untuk tanggal sekarang!'
+        //     ], 400);
+        // } elseif ($mttr && $mtbf != null) {
+        //     return response()->json([
+        //         'error' => 'Data MTTR untuk hardware ini sudah ada untuk tanggal sekarang!'
+        //     ], 400);
+        // }
         //* Create All MTBF and MTTR => SOLVED
         //* Create MTBF and then MTTR => SOLVED
         //* Create MTTR and then MTBF => SOLVED
@@ -187,91 +198,91 @@ class MaintenanceController extends Controller
         //* Delete MTTR and Create MTBF => SOLVED
         // Stored Data
         try {
-            if ($mtbf == null && $mttrData["mttr"] == 0) {
-                // Stored Data MTBF
-                $mtbf = MTBF::create([
-                    'working' => $mtbfData["total_work"],
-                    'breakdown' => $mtbfData["breakdown"],
-                    'total' => $mtbfData["mtbf"],
-                    'time' => $mtbfData["time_breakdown"],
-                ]);
+            // if ($mttrData["mttr"] == 0) {
+            //     // Stored Data MTBF
+            //     $mtbf = MTBF::create([
+            //         'working' => $mtbfData["total_work"],
+            //         'breakdown' => $mtbfData["breakdown"],
+            //         'total' => $mtbfData["mtbf"],
+            //         'time' => $mtbfData["time_breakdown"],
+            //     ]);
 
-                if ($maintenance) {
-                    $maintenance->mtbf_id = $mtbf->id;
-                    $maintenance->availability = $this->calculatedAvailibility(
-                        $mtbf->total,
-                        $maintenance->mttr->total
-                    );
-                    $maintenance->save();
-                } else {
-                    $mt_dt = MaintenanceDetail::create([
-                        'code' => $request->code
-                    ]);
-                    $maintenance = Maintenance::create([
-                        'mtbf_id' => $mtbf->id,
-                        'hardware_id' => $request->hardware,
-                        'mt_id' => $mt_dt->id,
-                        'availability' => $this->calculatedAvailibility($mtbf->total ?? 0, $mttr->total ?? 0),
-                    ]);
-                }
-            } elseif ($mttr == null && $request->total_work == null) {
-                // Create Data MTTR
-                $mttr = MTTR::create([
-                    'maintenance_time' => $mttrData["maintenance_time"],
-                    'time' => $mttrData["start_time_maintenance"],
-                    'repairs' => count($mttrData["maintenance_time"]),
-                    'total' => $mttrData["mttr"]
-                ]);
+            //     if ($maintenance) {
+            //         $maintenance->mtbf_id = $mtbf->id;
+            //         $maintenance->availability = $this->calculatedAvailibility(
+            //             $mtbf->total,
+            //             $maintenance->mttr->total
+            //         );
+            //         $maintenance->save();
+            //     } else {
+            //         $mt_dt = MaintenanceDetail::create([
+            //             'code' => $request->code
+            //         ]);
+            //         $maintenance = Maintenance::create([
+            //             'mtbf_id' => $mtbf->id,
+            //             'hardware_id' => $request->hardware,
+            //             'mt_id' => $mt_dt->id,
+            //             'availability' => $this->calculatedAvailibility($mtbf->total ?? 0, $mttr->total ?? 0),
+            //         ]);
+            //     }
+            // } elseif ($mttr == null && $request->total_work == null) {
+            //     // Create Data MTTR
+            //     $mttr = MTTR::create([
+            //         'maintenance_time' => $mttrData["maintenance_time"],
+            //         'time' => $mttrData["start_time_maintenance"],
+            //         'repairs' => count($mttrData["maintenance_time"]),
+            //         'total' => $mttrData["mttr"]
+            //     ]);
 
-                if ($maintenance) {
-                    $maintenance->mttr_id = $mttr->id;
-                    $maintenance->availability = $this->calculatedAvailibility(
-                        $maintenance->mtbf->total,
-                        $mttr->total
-                    );
-                    $maintenance->save();
-                } else {
-                    $mt_dt = MaintenanceDetail::create([
-                        'code' => $request->code
-                    ]);
-                    $maintenance = Maintenance::create([
-                        'mttr_id' => $mttr->id,
-                        'hardware_id' => $request->hardware,
-                        'mt_id' => $mt_dt->id,
-                        'availability' => $this->calculatedAvailibility($mtbf->total ?? 0, $mttr->total ?? 0),
-                    ]);
-                }
-            } elseif ($mtbf == null && $mttr == null) {
-                // Create ALL Data MTBF & MTTR   
-                $mtbf = MTBF::create([
-                    'working' => $mtbfData["total_work"],
-                    'breakdown' => $mtbfData["breakdown"],
-                    'total' => $mtbfData["mtbf"],
-                    'time' => $mtbfData["time_breakdown"],
-                ]);
-                $mttr = MTTR::create([
-                    'maintenance_time' => $mttrData["maintenance_time"],
-                    'time' => $mttrData["start_time_maintenance"],
-                    'repairs' => count($mttrData["maintenance_time"]),
-                    'total' => $mttrData["mttr"]
-                ]);
+            //     if ($maintenance) {
+            //         $maintenance->mttr_id = $mttr->id;
+            //         $maintenance->availability = $this->calculatedAvailibility(
+            //             $maintenance->mtbf->total,
+            //             $mttr->total
+            //         );
+            //         $maintenance->save();
+            //     } else {
+            //         $mt_dt = MaintenanceDetail::create([
+            //             'code' => $request->code
+            //         ]);
+            //         $maintenance = Maintenance::create([
+            //             'mttr_id' => $mttr->id,
+            //             'hardware_id' => $request->hardware,
+            //             'mt_id' => $mt_dt->id,
+            //             'availability' => $this->calculatedAvailibility($mtbf->total ?? 0, $mttr->total ?? 0),
+            //         ]);
+            //     }
+            // } elseif ($mtbf == null && $mttr == null) {
+            // Create ALL Data MTBF & MTTR   
+            $mtbf = MTBF::create([
+                'working' => $mtbfData["total_work"],
+                'breakdown' => $mtbfData["breakdown"],
+                'total' => $mtbfData["mtbf"],
+                'time' => $mtbfData["time_breakdown"],
+            ]);
+            $mttr = MTTR::create([
+                'maintenance_time' => $mttrData["maintenance_time"],
+                'time' => $mttrData["start_time_maintenance"],
+                'repairs' => count($mttrData["maintenance_time"]),
+                'total' => $mttrData["mttr"]
+            ]);
 
-                $mt_dt = MaintenanceDetail::create([
-                    'code' => $request->code
-                ]);
-                $maintenance = Maintenance::create([
-                    'mtbf_id' => $mtbf->id,
-                    'mttr_id' => $mttr->id,
-                    'hardware_id' => $request->hardware,
-                    'mt_id' => $mt_dt->id,
-                    'availability' => $this->calculatedAvailibility($mtbf->total, $mttr->total),
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 'error',
-                    'error' => 'Data Tidak Bisa Diupdate Hapus Terlebih Dahulu'
-                ], 400);
-            }
+            $mt_dt = MaintenanceDetail::create([
+                'code' => $request->code
+            ]);
+            $maintenance = Maintenance::create([
+                'mtbf_id' => $mtbf->id,
+                'mttr_id' => $mttr->id,
+                'hardware_id' => $request->hardware,
+                'mt_id' => $mt_dt->id,
+                'availability' => $this->calculatedAvailibility($mtbf->total, $mttr->total),
+            ]);
+            // } else {
+            //     return response()->json([
+            //         'status' => 'error',
+            //         'error' => 'Data Tidak Bisa Diupdate Hapus Terlebih Dahulu'
+            //     ], 400);
+            // }
 
             if ($dependency->isNotEmpty()) {
                 $availibilityData = [];

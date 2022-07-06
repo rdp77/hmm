@@ -12,8 +12,11 @@ var table = $("#table").DataTable({
     ajax: {
         url: index,
         type: "GET",
+        data: function (d) {
+            d.filter_period = $("#filter_period").val();
+        },
     },
-    dom: '<"html5buttons">lBrtip',
+    dom: '<"html5buttons">lBfrtip',
     oLanguage: {
         sEmptyTable: "Belum ada data",
     },
@@ -74,6 +77,14 @@ var table = $("#table").DataTable({
             text: "Sembunyikan Kolom",
         },
     ],
+});
+
+$(".filter_name").on("keyup", function () {
+    table.search($(this).val()).draw();
+});
+
+$("#filter_period").change(function () {
+    table.draw();
 });
 
 var statistics_chart = document.getElementById("uptime").getContext("2d");
