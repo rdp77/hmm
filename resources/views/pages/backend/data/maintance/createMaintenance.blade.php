@@ -35,7 +35,10 @@
                 </div>
                 <select class="form-control select2" name="hardware">
                     @foreach ($hardware as $h)
-                    <option value="{{ $h->id }}">{{ $h->name.__(' | ').$h->brand->name }}</option>
+                    <option value="{{ $h->id }}">
+                        {{ $h->code.__(' | ').$h->name.__(' | ').$h->type->name.__(' |
+                        ').$h->type->brand->name }}
+                    </option>
                     @endforeach
                 </select>
             </div>

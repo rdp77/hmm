@@ -63,7 +63,7 @@ class MaintenanceController extends Controller
                     return $row->hardware->code;
                 })
                 ->addColumn('brand', function ($row) {
-                    return $row->hardware->brand->name;
+                    return $row->hardware->type->brand->name;
                 })
                 ->addColumn('mtbf', function ($row) {
                     $mtbf = $row->mtbf->total ?? 0;
@@ -93,7 +93,7 @@ class MaintenanceController extends Controller
     public function create()
     {
         $code = $this->getRandomCode();
-        $hardware = Hardware::with('brand')->get();
+        $hardware = Hardware::with('type.brand')->get();
         return view('pages.backend.data.maintance.createMaintenance', [
             'code' => $code,
             'hardware' => $hardware,
@@ -365,13 +365,6 @@ class MaintenanceController extends Controller
 
     function getStatistics($table, $column)
     {
-        // $data = DB::table($table)
-        //     ->select('id', 'created_at', 'availability')
-        //     ->get()
-        //     ->groupBy(function ($date) {
-        //         //return Carbon::parse($date->created_at)->format('Y'); // grouping by years
-        //         return Carbon::parse($date->created_at)->format('m'); // grouping by months
-        //     });
         $year = Carbon::now()->format('Y');
         $data = DB::table($table)
             // monthname for name month
@@ -424,7 +417,6 @@ class MaintenanceController extends Controller
         $data['maintenance'] = Maintenance::with('detail')
             ->where("hardware_id", $req->hardware_id)
             ->get()->pluck('detail');
-
         return response()->json([
             'status' => 'success',
             'data' => $data['maintenance'],
@@ -440,8 +432,8 @@ class MaintenanceController extends Controller
         $data .= '<div class="col"> <div class="form-group"> <div class="d-block">      ';
         $data .= '<label class="control-label">Hardware<code>*</code></label></div>';
         $data .= '<select class="form-control select2 ajax" onchange="getMaintenance(this)" id="hardware_' . $count . '" name="hardware_' . $count . '" required>';
-        foreach (Hardware::all() as $h) {
-            $data .= '<option value="' . $h->id . '">' . $h->name . ' | ' . $h->brand->name . '</option>';
+        foreach (Hardware::with('type.brand')->get() as $h) {
+            $data .= '<option value="' . $h->id . '">' . $h->name . ' | ' . $h->type->name . ' | ' . $h->type->brand->name . '</option>';
         };
         $data .= ' </select> </div></div><div class="col"> <div class="form-group"> <div class="d-block">';
         $data .= '<label class="control-label">Kode Maintenance<code>*</code></label> </div>';
