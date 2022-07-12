@@ -99,16 +99,16 @@ use Illuminate\Support\Carbon;
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{ $hardware->brand->name ?? __('Kosong') }}</td>
-                                <td>{{ $hardware->brand->address ?? __('Kosong') }}</td>
-                                <td>{{ $hardware->brand->phone ?? __('Kosong') }}</td>
-                                <td>{{ $hardware->brand->email ?? __('Kosong') }}</td>
+                                <td>{{ $hardware->type->brand->name ?? __('Kosong') }}</td>
+                                <td>{{ $hardware->type->brand->address ?? __('Kosong') }}</td>
+                                <td>{{ $hardware->type->brand->phone ?? __('Kosong') }}</td>
+                                <td>{{ $hardware->type->brand->email ?? __('Kosong') }}</td>
                                 @php
-                                $link = '<a href="http://' . $hardware->brand->website . '" target="_blank">' .
-                                    $hardware->brand->website .
+                                $link = '<a href="http://' . $hardware->type->brand->website . '" target="_blank">' .
+                                    $hardware->type->brand->website .
                                     '</a>';
                                 @endphp
-                                <td>{!! $hardware->brand->website ? $link: __('Kosong') !!}</td>
+                                <td>{!! $hardware->type->brand->website ? $link: __('Kosong') !!}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -124,7 +124,7 @@ use Illuminate\Support\Carbon;
                         </thead>
                         <tbody>
                             <tr>
-                                @foreach ($hardware->brand->spareparts as $s)
+                                @foreach ($hardware->type->brand->spareparts as $s)
                                 <td>{{ $s->name ?? __('Kosong') }}</td>
                                 <td>{{ $s->stock ?? __('Kosong') }}</td>
                                 @endforeach

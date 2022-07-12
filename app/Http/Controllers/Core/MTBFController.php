@@ -61,7 +61,7 @@ class MTBFController extends Controller
                     return $row->hardware->code;
                 })
                 ->addColumn('brand', function ($row) {
-                    return $row->hardware->brand->name;
+                    return $row->hardware->type->brand->name;
                 })
                 ->addColumn('total_work', function ($row) {
                     return $row->mtbf->working . " Jam";

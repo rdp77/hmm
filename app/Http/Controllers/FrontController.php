@@ -55,7 +55,7 @@ class FrontController extends Controller
 
     public function result($code)
     {
-        $hardware = Hardware::with('brand', 'brand.spareparts')->where('code', $code)
+        $hardware = Hardware::with('type', 'type.brand', 'type.brand.spareparts')->where('code', $code)
             ->first();
         $barcode = DNS2DFacade::getBarcodeHTML($hardware->code ?? url('/'), 'QRCODE');
         $dependency = Dependency::with(
@@ -86,7 +86,7 @@ class FrontController extends Controller
                     return $row->detail->code;
                 })
                 ->addColumn('brand', function ($row) {
-                    return $row->hardware->brand->name;
+                    return $row->hardware->type->brand->name;
                 })
                 ->addColumn('mtbf', function ($row) {
                     return $row->mtbf->total . " Jam";
@@ -120,7 +120,7 @@ class FrontController extends Controller
                     return $row->detail->code;
                 })
                 ->addColumn('brand', function ($row) {
-                    return $row->hardware->brand->name;
+                    return $row->hardware->type->brand->name;
                 })
                 ->addColumn('total_work', function ($row) {
                     return $row->mtbf->working . " Jam";
@@ -163,7 +163,7 @@ class FrontController extends Controller
                     return $row->detail->code;
                 })
                 ->addColumn('brand', function ($row) {
-                    return $row->hardware->brand->name;
+                    return $row->hardware->type->brand->name;
                 })
                 ->addColumn('total_maintenance', function ($row) {
                     $maintenanceTotal = 0;

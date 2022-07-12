@@ -65,7 +65,7 @@ class MTTRController extends Controller
                     return $row->hardware->code;
                 })
                 ->addColumn('brand', function ($row) {
-                    return $row->hardware->brand->name;
+                    return $row->hardware->type->brand->name;
                 })
                 ->addColumn('total_maintenance', function ($row) {
                     $maintenanceTotal = 0;
