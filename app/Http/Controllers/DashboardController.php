@@ -10,7 +10,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
-use Sarfraznawaz2005\ServerMonitor\ServerMonitor;
 use Spatie\Activitylog\Models\Activity;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Milon\Barcode\Facades\DNS2DFacade;
@@ -23,12 +22,10 @@ class DashboardController extends Controller
      * @return void
      */
     public function __construct(
-        MainController $MainController,
-        ServerMonitor $serverMonitor
+        MainController $MainController
     ) {
         $this->middleware('auth');
         $this->MainController = $MainController;
-        $this->serverMonitor = $serverMonitor;
     }
 
     /**

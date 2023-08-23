@@ -10,11 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\URL;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Sarfraznawaz2005\ServerMonitor\ServerMonitor;
 
 class MainController extends Controller
 {
@@ -23,10 +21,9 @@ class MainController extends Controller
      *
      * @return void
      */
-    public function __construct(ServerMonitor $serverMonitor)
+    public function __construct()
     {
         $this->middleware('auth');
-        $this->serverMonitor = $serverMonitor;
     }
 
     /**

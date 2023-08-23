@@ -168,7 +168,6 @@ return [
         Milon\Barcode\BarcodeServiceProvider::class,
         LaraIzitoast\LaraIzitoastServiceProvider::class,
         Laravolt\Indonesia\ServiceProvider::class,
-        Sarfraznawaz2005\ServerMonitor\ServiceProvider::class,
         Spatie\Menu\Laravel\MenuServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
 
